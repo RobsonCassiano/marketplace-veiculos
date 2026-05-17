@@ -19,11 +19,90 @@
         <img src="../assets/images/slogan2.png" alt="BuscarAuto" class="logo">
 
         <nav class="nav-center" aria-label="Navegação principal">
-            <a href="index.html">Inicio</a>
-            <a href="veiculo.html">Vender</a>
-            <a href="comprar.html">Comprar</a>
-            <a href="servicos.html">Serviços</a>
-            <a href="sobre.html">Sobre</a>
+            <a href="index.html" class="nav-link">Inicio</a>
+            
+            <div class="nav-item">
+                <button class="nav-link nav-trigger" data-submenu="comprar">
+                    Comprar
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <div class="submenu" id="submenu-comprar">
+                    <a href="#carros-usados" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
+                        </svg>
+                        Carros Usado
+                    </a>
+                    <a href="#carros-novos" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
+                        </svg>
+                        Carros Novos
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-trigger" data-submenu="vender">
+                    Vender
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <div class="submenu" id="submenu-vender">
+                    <a href="#anuncie" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-9h10v2H7z"></path>
+                        </svg>
+                        Anuncie
+                    </a>
+                    <a href="#lojas-especializadas" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                        </svg>
+                        Lojas Especializadas
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-trigger" data-submenu="servicos">
+                    Serviços
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <div class="submenu" id="submenu-servicos">
+                    <a href="#financiamento" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.8 10.9c-2.27-.59-3-1.38-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .9-.72 1.55-1.77 1.55-1.6 0-2.29-.72-2.44-1.82h-2.21c.14 1.64 1.16 2.95 3.44 3.42v2.12h3v-2.12c1.77-.42 3.77-1.6 3.77-3.84 0-2.86-2.34-3.85-5.19-4.48z"></path>
+                        </svg>
+                        Financiamento
+                    </a>
+                    <a href="#seguro-auto" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+                        </svg>
+                        Seguro Auto
+                    </a>
+                    <a href="#cadastre-loja" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"></path>
+                        </svg>
+                        Cadastre sua Loja
+                    </a>
+                    <a href="#tabela-fipe" class="submenu-link">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 10.02H5V21h5v-10.98zm6 0v10.98h5V10.02h-5zM19 0h-1v3h1V0zm-6 0h-1v3h1V0zM9 0H8v3h1V0z"></path>
+                        </svg>
+                        Tabela Fipe
+                    </a>
+                </div>
+            </div>
+
+            <a href="sobre.html" class="nav-link">Sobre</a>
         </nav>
 
         <div class="nav-right">
@@ -160,7 +239,7 @@
 
             <div class="service-card">
                 <h3>Cadastre sua Loja</h3>
-                <p>Venda seus veículos para milhões de compradores em todo o Brasil.</p>
+                <p>Venda seus veículos para compradores em todo o Brasil.</p>
             </div>
 
         </div>

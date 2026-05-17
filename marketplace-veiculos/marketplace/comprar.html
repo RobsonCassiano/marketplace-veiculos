@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Comprar - BuscarAuto</title>
+
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <link rel="stylesheet" href="../../dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/css/marketplace.css">
+</head>
+<body>
+
+  <header class="header">
+
+    <img src="../assets/images/slogan2.png" alt="BuscarAuto" class="logo">
+
+    <nav class="nav-center" aria-label="Navegação principal">
+      <a href="index.html">Inicio</a>
+      <a href="veiculo.html">Vender</a>
+      <a href="comprar.html">Comprar</a>
+      <a href="servicos.html">Serviços</a>
+      <a href="sobre.html">Sobre</a>
+    </nav>
+
+    <div class="nav-right">
+
+      <button class="login-btn" id="loginBtn">
+
+        <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+          <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
+        </svg>
+
+        Entrar
+
+      </button>
+
+      <div class="login-dropdown" id="loginDropdown">
+        <a href="../cliente/login.html" class="dropdown-link">
+          <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
+          </svg>
+          Login
+        </a>
+        <a href="../lojista/login.html" class="dropdown-link">
+          <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-4h2v18h-2z" fill="currentColor"></path>
+          </svg>
+          Sou Lojista
+        </a>
+      </div>
+
+    </div>
+
+  </header>
+
+  <section class="hero-secondary">
+
+    <div class="container-menu">
+      <h1>Comprar</h1>
+      
+      <button class="hamburger-btn" id="hamburgerBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+
+      <div class="hamburger-menu" id="hamburgerMenu">
+        
+        <div class="menu-category">
+          <h3 class="category-title">
+            <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2z" stroke="currentColor" stroke-width="2"></path>
+              <path d="M6 10h12" stroke="currentColor" stroke-width="2"></path>
+            </svg>
+            Comprar
+          </h3>
+          <a href="#carros-usados" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
+            </svg>
+            Carros Usado
+          </a>
+          <a href="#carros-novos" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
+            </svg>
+            Carros Novos
+          </a>
+        </div>
+
+        <div class="menu-category">
+          <h3 class="category-title">
+            <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 8v8M8 12h8M20 12a8 8 0 11-16 0 8 8 0 0116 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+            Vender
+          </h3>
+          <a href="#anuncie" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-9h10v2H7z"></path>
+            </svg>
+            Anuncie
+          </a>
+          <a href="#lojas-especializadas" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+            </svg>
+            Lojas Especializadas
+          </a>
+        </div>
+
+        <div class="menu-category">
+          <h3 class="category-title">
+            <svg class="category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" fill="currentColor"></path>
+            </svg>
+            Serviços
+          </h3>
+          <a href="#financiamento" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.8 10.9c-2.27-.59-3-1.38-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .9-.72 1.55-1.77 1.55-1.6 0-2.29-.72-2.44-1.82h-2.21c.14 1.64 1.16 2.95 3.44 3.42v2.12h3v-2.12c1.77-.42 3.77-1.6 3.77-3.84 0-2.86-2.34-3.85-5.19-4.48z"></path>
+            </svg>
+            Financiamento
+          </a>
+          <a href="#seguro-auto" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+            </svg>
+            Seguro Auto
+          </a>
+          <a href="#cadastre-loja" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"></path>
+            </svg>
+            Cadastre sua Loja
+          </a>
+          <a href="#tabela-fipe" class="menu-link">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 10.02H5V21h5v-10.98zm6 0v10.98h5V10.02h-5zM19 0h-1v3h1V0zm-6 0h-1v3h1V0zM9 0H8v3h1V0z"></path>
+            </svg>
+            Tabela Fipe
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="content-section">
+    <h2>Encontre o veículo perfeito para você</h2>
+    <p>Navegue pelos menus acima e descubra milhares de opções de veículos novos e usados.</p>
+  </section>
+
+  <footer>
+    <p>© 2026 BuscarAuto — Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="../../dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/marketplace.js"></script>
+
+</body>
+</html>
