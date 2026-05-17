@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BuscarAuto</title>
+
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+    <link rel="stylesheet" href="../../dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/marketplace.css">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <img src="../assets/images/slogan2.png" alt="BuscarAuto" class="logo">
+
+        <nav class="nav-center" aria-label="Navegação principal">
+            <a href="index.html">Inicio</a>
+            <a href="veiculo.html">Vender</a>
+            <a href="comprar.html">Comprar</a>
+            <a href="servicos.html">Serviços</a>
+            <a href="sobre.html">Sobre</a>
+        </nav>
+
+        <div class="nav-right">
+
+            <button class="login-btn" id="loginBtn">
+
+                <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+                    <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
+                </svg>
+
+                Entrar
+
+            </button>
+
+            <div class="login-dropdown" id="loginDropdown">
+                <a href="../cliente/login.html" class="dropdown-link">
+                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+                        <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
+                    </svg>
+                    Login
+                </a>
+                <a href="../lojista/login.html" class="dropdown-link">
+                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-4h2v18h-2z" fill="currentColor">
+                        </path>
+                    </svg>
+                    Sou Lojista
+                </a>
+            </div>
+
+        </div>
+
+    </header>
+
+    <section class="hero">
+
+        <h2 class="hero-title">
+            Busque por ✨
+
+            <span id="animated-text"></span>
+        </h2>
+
+        <div class="search-container">
+
+            <span class="search-icon">✨</span>
+
+            <input type="text" id="searchInput" placeholder="Descreva o veículo que você procura"
+                aria-label="Campo de busca de veículos">
+
+            <button class="search-button">
+                Buscar veículos
+            </button>
+
+        </div>
+
+        <div class="categories">
+            <button>SUV</button>
+            <button>Sedan</button>
+            <button>Elétricos</button>
+            <button>Picapes</button>
+            <button>Utilitários</button>
+        </div>
+
+    </section>
+
+    <section class="carousel-section">
+
+        <h2 class="section-title">Veículos em destaque</h2>
+
+        <div class="carousel">
+
+            <button class="carousel-btn prev">&#10094;</button>
+
+            <div class="carousel-track">
+
+                <div class="car-card">
+                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop"
+                        alt="BMW">
+
+                    <div class="car-content">
+                        <h3>Camaro ZL1</h3>
+                        <p>2024 • Automático • 0km</p>
+                        <span class="price">R$ 420.000</span>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1200&auto=format&fit=crop"
+                        alt="Compass">
+
+                    <div class="car-content">
+                        <h3>Mercedes-Benz C300</h3>
+                        <p>2023 • Flex • Automático</p>
+                        <span class="price">R$ 189.900</span>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1200&auto=format&fit=crop"
+                        alt="Corolla">
+
+                    <div class="car-content">
+                        <h3>Bugatti Chiron</h3>
+                        <p>2024 • Híbrido • 0km</p>
+                        <span class="price">R$ 210.000</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="carousel-btn next">&#10095;</button>
+
+        </div>
+
+    </section>
+
+    <section class="services">
+
+        <h2 class="section-title">Serviços</h2>
+
+        <div class="services-grid">
+
+            <div class="service-card">
+                <h3>Financiamento</h3>
+                <p>Simule parcelas e encontre as melhores taxas para o seu próximo veículo.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>Seguro Auto</h3>
+                <p>Compare seguradoras e proteja seu veículo com facilidade.</p>
+            </div>
+
+            <div class="service-card">
+                <h3>Cadastre sua Loja</h3>
+                <p>Venda seus veículos para milhões de compradores em todo o Brasil.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+        <p>© 2026 BuscarAuto — Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="../../dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/marketplace.js"></script>
+
+</body>
+
+</html>
