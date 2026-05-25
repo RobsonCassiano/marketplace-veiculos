@@ -1,20 +1,551 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-   <meta
-      name="description"
-      content="Quer comprar ou vender um veículo sem sair de casa? Aqui você conta com uma experiência segura e 100% online. Acesse já!"
-    />
-  <title>BuscarAuto</title>
-  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
-  <meta http-equiv="refresh" content="0; url=marketplace-veiculos/marketplace/index.html">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BuscarAuto</title>
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- Bootstrap (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos do projeto -->
+    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <p>
-    Abrindo BuscarAuto...
-    <a href="marketplace-veiculos/marketplace/index.html">Clique aqui se nao redirecionar.</a>
-  </p>
+    <a href="#mainContent" class="skip-link">Pular para o conteúdo principal</a>
+
+    <header class="header" role="banner">
+
+        <img src="images/slogan2.png" alt="BuscarAuto" class="logo">
+
+        <nav class="nav-center" aria-label="Navegação principal">
+            <a href="#inicio" class="nav-link">Início</a>
+            
+            <div class="nav-item">
+                <button class="nav-link nav-trigger" data-submenu="comprar">
+                    Comprar
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <div class="submenu" id="submenu-comprar" role="menu">
+                    <a href="#particular" class="submenu-link" role="menuitem">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
+                        </svg>
+                        Particular
+                    </a>
+                    <a href="#lojas-credenciadas" class="submenu-link" role="menuitem">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
+                        </svg>
+                        Lojas Credenciadas
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-trigger" data-submenu="vender">
+                    Vender
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <div class="submenu" id="submenu-vender" role="menu">
+                    <a href="#anuncie" class="submenu-link" role="menuitem">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-9h10v2H7z"></path>
+                        </svg>
+                        Anuncie
+                    </a>
+                    <a href="#lojas-especializadas" class="submenu-link" role="menuitem">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                        </svg>
+                        Lojas Especializadas
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-trigger" data-submenu="servicos">
+                    Serviços
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <div class="submenu" id="submenu-servicos" role="menu">
+                    <a href="#cadastre-loja" class="submenu-link" role="menuitem">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"></path>
+                        </svg>
+                        Cadastre sua Loja
+                    </a>
+                    <a href="https://veiculos.fipe.org.br/#carro"  target="_blank" rel="noopener noreferrer" class="submenu-link" role="menuitem">
+                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 10.02H5V21h5v-10.98zm6 0v10.98h5V10.02h-5zM19 0h-1v3h1V0zm-6 0h-1v3h1V0zM9 0H8v3h1V0z"></path>
+                        </svg>
+                        Tabela Fipe
+                    </a>
+                </div>
+            </div>
+
+            <a href="#sobre" class="nav-link">Sobre</a>
+        </nav>
+
+        <div class="nav-right">
+
+            <div class="accessibility-controls" aria-label="Controles de acessibilidade">
+                <button type="button" id="fontDecrease" class="accessibility-btn" aria-label="Diminuir tamanho da fonte">A-</button>
+                <button type="button" id="fontIncrease" class="accessibility-btn" aria-label="Aumentar tamanho da fonte">A+</button>
+                <button type="button" id="contrastToggle" class="accessibility-btn" aria-pressed="false" aria-label="Ativar modo de alto contraste">Contraste</button>
+                <button type="button" id="resetAccessibility" class="accessibility-btn" aria-label="Restaurar configurações padrão de acessibilidade">Reset</button>
+            </div>
+
+            <button class="login-btn" id="loginBtn" aria-haspopup="true" aria-expanded="false" aria-controls="loginDropdown">
+
+                <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+                    <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
+                </svg>
+
+                Entrar
+
+            </button>
+
+            <div class="login-dropdown" id="loginDropdown" role="menu">
+                <a href="#cliente" class="dropdown-link" role="menuitem">
+                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+                        <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
+                    </svg>
+                    Area do Cliente
+                </a>
+                <a href="#cadastro-veiculo" class="dropdown-link" role="menuitem">
+                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-4h2v18h-2z" fill="currentColor">
+                        </path>
+                    </svg>
+                    Sou Lojista
+                </a>
+                <a href="#admin" class="dropdown-link" role="menuitem">
+                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2l8 4v6c0 5-3.4 9.7-8 10-4.6-.3-8-5-8-10V6l8-4zm0 2.2L6 7.1V12c0 3.8 2.4 7.3 6 7.9 3.6-.6 6-4.1 6-7.9V7.1l-6-2.9z"></path>
+                    </svg>
+                    Admin
+                </a>
+            </div>
+
+        </div>
+
+    </header>
+    <div id="accessibilityStatus" class="sr-only" role="status" aria-live="polite"></div>
+
+    <main id="mainContent" role="main" tabindex="-1">
+    <section class="hero">
+
+        <h2 class="hero-title">Encontre <span id="animated-text">SUVs</span> no BuscarAuto</h2>
+        <p class="hero-subtitle">Compare ofertas de lojas de todo o Brasil e faça o melhor negócio.</p>
+
+        <form class="search-form mb-4" role="search" aria-label="Busca de veículos">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label for="searchInputMarca" class="form-label">Marca ou Modelo</label>
+                    <div class="input-group">
+                        <input id="searchInputMarca" type="text" class="form-control" placeholder="Ex: Toyota Corolla" aria-label="Marca ou Modelo">
+                        <span class="input-group-text" aria-hidden="true">🔍</span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label for="priceRangeSelect" class="form-label">Faixa de Preço</label>
+                    <select id="priceRangeSelect" class="form-select">
+                        <option>Selecione</option>
+                        <option>Até R$ 50.000</option>
+                        <option>R$ 50.000 - R$ 100.000</option>
+                        <option>R$ 100.000 - R$ 150.000</option>
+                        <option>Acima de R$ 150.000</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="regionSelect" class="form-label">Região</label>
+                    <select id="regionSelect" class="form-select">
+                        <option>Selecione</option>
+                        <option>Sudeste</option>
+                        <option>Sul</option>
+                        <option>Nordeste</option>
+                        <option>Centro-Oeste</option>
+                        <option>Norte</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label for="yearFromSelect" class="form-label">De</label>
+                    <select id="yearFromSelect" class="form-select">
+                        <option>2010</option>
+                        <option>2015</option>
+                        <option>2020</option>
+                        <option>2024</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label for="yearToSelect" class="form-label">Até</label>
+                    <select id="yearToSelect" class="form-select">
+                        <option>2024</option>
+                        <option>2023</option>
+                        <option>2020</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark w-100">Buscar</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="highlights d-flex justify-content-around flex-wrap gap-3 mb-4">
+            <div class="highlight-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm3.6-14.4a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0zM12 18.4a3.6 3.6 0 100-7.2 3.6 3.6 0 000 7.2z"></path>
+                </svg>
+                <strong>Veículos de lojas confiáveis</strong>
+            </div>
+            <div class="highlight-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20m-7-7h14"></path>
+                </svg>
+                <strong>Compare preços</strong>
+            </div>
+            <div class="highlight-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                </svg>
+                <strong>Ofertas de todo o Brasil</strong>
+            </div>
+            <div class="highlight-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <strong>Negociação segura</strong>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="marketplace-section">
+        <div class="container-fluid">
+            <div class="row g-4">
+                <!-- Filtros Laterais -->
+                <div class="col-lg-3 col-md-4">
+                    <div class="filters-sidebar" role="region" aria-label="Filtros de veículos">
+                        <div class="filters-header d-flex justify-content-between align-items-center mb-3">
+                            <h3>Filtros</h3>
+                            <a href="#" class="text-muted small">Limpar tudo</a>
+                        </div>
+
+                        <!-- Filtro Marca -->
+                        <div class="filter-group mb-4">
+                            <h5 class="filter-title">Marca</h5>
+                            <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar marca" id="searchMarca">
+                            <div class="filter-options">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marcaVolkswagen" data-filter="marca" value="Volkswagen">
+                                    <label class="form-check-label" for="marcaVolkswagen">Volkswagen <span class="count">(1.234)</span></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marcaFiat" data-filter="marca" value="Fiat">
+                                    <label class="form-check-label" for="marcaFiat">Fiat <span class="count">(487)</span></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marcaChevrolet" data-filter="marca" value="Chevrolet">
+                                    <label class="form-check-label" for="marcaChevrolet">Chevrolet <span class="count">(876)</span></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marcaToyota" data-filter="marca" value="Toyota">
+                                    <label class="form-check-label" for="marcaToyota">Toyota <span class="count">(765)</span></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marcaHonda" data-filter="marca" value="Honda">
+                                    <label class="form-check-label" for="marcaHonda">Honda <span class="count">(543)</span></label>
+                                </div>
+                                <a href="#" class="text-muted small">+ Ver todas</a>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Faixa de Preço -->
+                        <div class="filter-group mb-4">
+                            <h5 class="filter-title">Faixa de Preço</h5>
+                            <div class="price-range">
+                                <div class="d-flex gap-2 mb-2">
+                                    <input type="number" class="form-control form-control-sm" placeholder="Min" id="priceMin" value="20000">
+                                    <input type="number" class="form-control form-control-sm" placeholder="Max" id="priceMax" value="250000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Ano -->
+                        <div class="filter-group mb-4">
+                            <h5 class="filter-title">Ano</h5>
+                            <select class="form-select form-select-sm" id="filterYear" data-filter="year">
+                                <option value="">Selecione</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+
+                        <!-- Filtro Câmbio -->
+                        <div class="filter-group mb-4">
+                            <h5 class="filter-title">Câmbio</h5>
+                            <select class="form-select form-select-sm" id="filterTransmission" data-filter="transmission">
+                                <option value="">Selecione</option>
+                                <option value="Automático">Automático</option>
+                                <option value="Manual">Manual</option>
+                            </select>
+                        </div>
+
+                        <!-- Filtro Cidade -->
+                        <div class="filter-group mb-4">
+                            <h5 class="filter-title">Cidade / Região</h5>
+                            <select class="form-select form-select-sm" id="filterCity" data-filter="city">
+                                <option value="">Selecione</option>
+                                <option value="São Paulo">São Paulo</option>
+                                <option value="Rio de Janeiro">Rio de Janeiro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Veículos -->
+                <div class="col-lg-9 col-md-8">
+                    <!-- Barra de Resultados e Ordenação -->
+                    <div class="results-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                        <div>
+                            <span class="results-count" aria-live="polite"><strong id="resultCount">0</strong> resultados encontrados</span>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center">
+                            <label for="sortBy" class="form-label mb-0">Ordenar por:</label>
+                            <select class="form-select form-select-sm" id="sortBy" style="max-width: 180px;">
+                                <option value="relevance">Mais relevantes</option>
+                                <option value="price-asc">Menor preço</option>
+                                <option value="price-desc">Maior preço</option>
+                                <option value="newest">Mais novos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Veículos -->
+                    <div class="vehicles-grid" id="vehiclesGrid">
+                        <!-- Cards serão inseridos pelo JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secoes SPA adicionais -->
+        <section id="marketplace" class="view app-view" aria-labelledby="marketplace-title" hidden>
+            <h2 id="marketplace-title" class="section-title">Marketplace</h2>
+            <div id="marketplace-list" class="marketplace-list"></div>
+        </section>
+
+        <section id="cliente" class="view app-view" aria-labelledby="cliente-title" hidden>
+            <div class="app-shell">
+                <aside class="app-sidebar" aria-label="Menu da area do cliente">
+                    <div class="app-brand-card">
+                        <span class="avatar">MR</span>
+                        <strong>Marina Rocha</strong>
+                        <small>Cliente desde 2024</small>
+                    </div>
+                    <a class="active" href="#cliente">Visao geral</a>
+                    <a href="#cliente">Favoritos</a>
+                    <a href="#cliente">Mensagens</a>
+                    <a href="#cliente">Propostas</a>
+                    <a href="#cliente">Meu perfil</a>
+                </aside>
+                <div class="app-content">
+                    <div class="page-heading">
+                        <div>
+                            <p class="eyebrow">Area do cliente</p>
+                            <h2 id="cliente-title">Bem-vinda, Marina</h2>
+                            <p>Acompanhe favoritos, mensagens com agencias e propostas em andamento.</p>
+                        </div>
+                        <a class="btn btn-dark" href="#marketplace">Buscar veiculos</a>
+                    </div>
+                    <div class="metric-grid">
+                        <article class="metric-card"><span class="metric-icon">Fav</span><p>Favoritos</p><strong>6</strong><small>2 tiveram reducao de preco</small></article>
+                        <article class="metric-card"><span class="metric-icon">Msg</span><p>Mensagens</p><strong>4</strong><small>1 conversa nao lida</small></article>
+                        <article class="metric-card"><span class="metric-icon">Ok</span><p>Propostas</p><strong>3</strong><small>2 aguardando retorno</small></article>
+                    </div>
+                    <div class="two-column-layout">
+                        <section class="panel" aria-labelledby="favoritos-title">
+                            <div class="panel-header">
+                                <h3 id="favoritos-title">Veiculos favoritos</h3>
+                                <a href="#marketplace">Ver todos</a>
+                            </div>
+                            <div class="saved-vehicles">
+                                <article>
+                                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&auto=format&fit=crop" alt="Toyota Corolla branco">
+                                    <div><strong>Toyota Corolla XEi 2.0</strong><span>2020/2020 - 48.000 km</span><b>R$ 96.900</b></div>
+                                    <a class="btn btn-sm btn-outline-dark" href="#veiculo-seed-corolla">Ver</a>
+                                </article>
+                                <article>
+                                    <img src="https://images.unsplash.com/photo-1549925862-990fe6564d16?q=80&w=600&auto=format&fit=crop" alt="Honda Civic prata">
+                                    <div><strong>Honda Civic EXL 2.0</strong><span>2019/2019 - 62.000 km</span><b>R$ 104.900</b></div>
+                                    <a class="btn btn-sm btn-outline-dark" href="#veiculo-seed-civic">Ver</a>
+                                </article>
+                            </div>
+                        </section>
+                        <section class="panel" aria-labelledby="atividade-cliente-title">
+                            <div class="panel-header"><h3 id="atividade-cliente-title">Atividade recente</h3></div>
+                            <ul class="activity-list">
+                                <li><span>Hoje</span> Auto Norte respondeu sua proposta no Corolla.</li>
+                                <li><span>Ontem</span> Voce favoritou Honda Civic EXL 2.0.</li>
+                                <li><span>18/05</span> Simulacao enviada para Jeep Compass.</li>
+                                <li><span>16/05</span> Visita agendada com Prime Veiculos.</li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cadastro-veiculo" class="view app-view" aria-labelledby="cadastro-title" hidden>
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Veiculos / Cadastrar</p>
+                    <h2 id="cadastro-title">Cadastrar Veiculo</h2>
+                    <p>Preencha as informacoes para criar um anuncio com boa qualidade de busca.</p>
+                </div>
+                <a class="btn btn-outline-dark" href="#cliente">Voltar para lista</a>
+            </div>
+            <form id="cadastroForm" class="vehicle-form">
+                <div class="form-main">
+                    <section class="panel">
+                        <h3>1. Informacoes do veiculo</h3>
+                        <div class="form-grid">
+                            <label>Marca *<select name="brand" class="form-select" required><option value="">Selecione a marca</option><option>Toyota</option><option>Honda</option><option>Jeep</option><option>Volkswagen</option><option>Chevrolet</option></select></label>
+                            <label>Modelo *<input name="title" class="form-control" placeholder="Ex.: Corolla XEi 2.0" required></label>
+                            <label>Versao<input name="version" class="form-control" placeholder="Ex.: Flex Automatico"></label>
+                            <label>Ano *<input name="year" type="number" class="form-control" min="1980" max="2026" placeholder="2024" required></label>
+                            <label>Quilometragem *<input name="km" class="form-control" placeholder="Ex.: 48.000" required></label>
+                            <label>Preco *<input name="price" class="form-control" placeholder="Ex.: 96900" required></label>
+                            <label>Cor *<select name="color" class="form-select" required><option value="">Selecione a cor</option><option>Branco</option><option>Prata</option><option>Preto</option><option>Cinza</option><option>Vermelho</option></select></label>
+                            <label>Cambio *<select name="transmission" class="form-select" required><option value="">Selecione o cambio</option><option>Automatico</option><option>Manual</option></select></label>
+                            <label>Combustivel *<select name="fuel" class="form-select" required><option value="">Selecione o combustivel</option><option>Flex</option><option>Gasolina</option><option>Diesel</option><option>Eletrico</option><option>Hibrido</option></select></label>
+                            <label>Placa / Final<input name="plate" class="form-control" placeholder="Ex.: ABC1D23 ou Final 3"></label>
+                            <label>Imagem (URL)<input name="image" class="form-control" placeholder="https://..."></label>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <h3>2. Descricao do veiculo</h3>
+                        <div class="description-grid">
+                            <label>Descricao *<textarea name="description" class="form-control" rows="6" maxlength="1000" placeholder="Descreva os principais diferenciais, opcionais e estado geral do veiculo..." required></textarea></label>
+                            <fieldset>
+                                <legend>Destaques do veiculo</legend>
+                                <label><input type="checkbox" name="features" value="Aceita troca"> Aceita troca</label>
+                                <label><input type="checkbox" name="features" value="Unico dono"> Unico dono</label>
+                                <label><input type="checkbox" name="features" value="IPVA pago"> IPVA pago</label>
+                                <label><input type="checkbox" name="features" value="Revisoes em dia"> Revisoes em dia</label>
+                            </fieldset>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <h3>3. Fotos do veiculo</h3>
+                        <p class="muted">Adicione fotos reais do veiculo. Para este prototipo, use uma URL no campo de imagem.</p>
+                        <div class="photo-strip" aria-hidden="true"><div class="upload-tile">Adicionar fotos</div><div></div><div></div><div></div><div></div><div></div></div>
+                    </section>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline-dark">Salvar rascunho</button>
+                        <button type="submit" class="btn btn-dark">Publicar anuncio</button>
+                    </div>
+                </div>
+                <aside class="form-preview">
+                    <section class="panel">
+                        <div class="panel-header"><h3>Pre-visualizacao</h3><span class="status-pill">Rascunho</span></div>
+                        <div class="preview-card">
+                            <div class="preview-image"></div>
+                            <strong>Toyota Corolla XEi 2.0</strong>
+                            <span>2020/2020 - 48.000 km - Flex - Automatico</span>
+                            <b>R$ 96.900</b>
+                            <small>Sao Paulo - SP</small>
+                        </div>
+                    </section>
+                    <section class="panel contact-card">
+                        <h3>Contato da agencia</h3>
+                        <strong>Auto Norte Multimarcas</strong>
+                        <span>(11) 99999-9999</span>
+                        <span>Sao Paulo - SP</span>
+                    </section>
+                </aside>
+            </form>
+        </section>
+
+        <section id="visualizacao-veiculo" class="view app-view" aria-labelledby="veiculo-title" hidden>
+            <div id="veiculo-detail"></div>
+        </section>
+
+        <section id="admin" class="view app-view admin-dashboard" aria-labelledby="admin-title" hidden>
+            <div class="app-shell">
+                <aside class="app-sidebar" aria-label="Menu do admin">
+                    <div class="app-brand-card"><span class="avatar">SA</span><strong>Sistema Admin</strong><small>Painel do Super Admin</small></div>
+                    <a class="active" href="#admin">Visao geral</a><a href="#admin">Agencias</a><a href="#admin">Veiculos</a><a href="#admin">Leads / Mensagens</a><a href="#admin">Planos</a><a href="#admin">Relatorios</a>
+                </aside>
+                <div class="app-content">
+                    <div class="page-heading"><div><p class="eyebrow">Painel do Super Admin</p><h2 id="admin-title">Visao Geral</h2><p>Acompanhe os principais indicadores do marketplace.</p></div></div>
+                    <div class="metric-grid admin-metrics">
+                        <article class="metric-card"><span class="metric-icon">AG</span><p>Agencias ativas</p><strong>1.248</strong><small>+8,2% vs mes anterior</small></article>
+                        <article class="metric-card"><span class="metric-icon">PD</span><p>Agencias pendentes</p><strong>36</strong><small>+2,4% vs mes anterior</small></article>
+                        <article class="metric-card"><span class="metric-icon">VE</span><p>Veiculos publicados</p><strong id="adminVehicleCount">0</strong><small>Atualizado pelo estoque</small></article>
+                        <article class="metric-card"><span class="metric-icon">LD</span><p>Leads / Mensagens</p><strong>3.562</strong><small>+15,3% vs mes anterior</small></article>
+                        <article class="metric-card"><span class="metric-icon">$</span><p>Receita mensal</p><strong>R$ 1.248.900</strong><small>+18,7% vs mes anterior</small></article>
+                    </div>
+                    <section class="panel">
+                        <div class="panel-header"><h3>Aprovacao de agencias <span class="status-pill">36 pendentes</span></h3><button class="btn btn-sm btn-outline-dark">Ver todas</button></div>
+                        <div class="table-responsive"><table class="data-table"><thead><tr><th>Agencia</th><th>Cidade / Regiao</th><th>Plano</th><th>Cadastro</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="agencyApprovalRows"></tbody></table></div>
+                    </section>
+                    <div class="two-column-layout">
+                        <section class="panel"><div class="panel-header"><h3>Crescimento</h3><span class="status-pill">Ultimos 6 meses</span></div><div class="mini-chart" aria-label="Grafico decorativo de crescimento"><span style="height:38%"></span><span style="height:48%"></span><span style="height:56%"></span><span style="height:70%"></span><span style="height:78%"></span><span style="height:86%"></span></div></section>
+                        <section class="panel"><div class="panel-header"><h3>Atividades recentes</h3><button class="btn btn-sm btn-outline-dark">Ver todas</button></div><ul class="activity-list"><li><span>Ha 10 min</span> Nova agencia cadastrada: Auto Sul Motors.</li><li><span>Ha 35 min</span> Prime Veiculos atualizou seu plano.</li><li><span>Ha 1 h</span> Novo veiculo publicado: Honda Civic EXL.</li><li><span>Ha 2 h</span> Pagamento aprovado: Plano Premium.</li></ul></section>
+                    </div>
+                    <section class="panel"><div class="panel-header"><h3>Veiculos cadastrados</h3><a class="btn btn-sm btn-dark" href="#cadastro-veiculo">Novo veiculo</a></div><div id="admin-list"></div></section>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre" class="view app-view about-view" aria-labelledby="sobre-title" hidden>
+            <div class="about-hero">
+                <p class="eyebrow">Sobre o BuscarAuto</p>
+                <h2 id="sobre-title">Um marketplace para comprar e vender veiculos com mais confianca.</h2>
+                <p>Conectamos clientes, agencias parceiras e administradores em uma experiencia unica: busca simples, anuncios completos, atendimento rastreavel e gestao clara do estoque.</p>
+            </div>
+            <div class="about-grid">
+                <article class="panel"><h3>Para compradores</h3><p>Filtros objetivos, favoritos, propostas e contato direto com agencias verificadas.</p></article>
+                <article class="panel"><h3>Para agencias</h3><p>Cadastro de veiculos, acompanhamento de visualizacoes e mensagens centralizadas.</p></article>
+                <article class="panel"><h3>Para administradores</h3><p>Indicadores, aprovacao de agencias, auditoria e controle de publicacoes.</p></article>
+            </div>
+            <section class="panel about-band">
+                <h3>Nossa proposta</h3>
+                <p>Reduzir atrito na jornada de compra com informacoes completas, acessibilidade desde a navegacao e fluxos simples para cada perfil de usuario.</p>
+                <a class="btn btn-dark" href="#marketplace">Conhecer veiculos</a>
+            </section>
+        </section>
+    </main>
+
+        <footer>
+                <p>© 2026 BuscarAuto — Todos os direitos reservados.</p>
+        </footer>
+
+        <!-- Scripts: Bootstrap CDN e scripts do projeto -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/marketplace.js?v=2"></script>
+        <script type="module" src="js/main.js?v=2"></script>
+
+   
+
 </body>
+
 </html>

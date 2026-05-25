@@ -9,55 +9,63 @@ Nome sugerido--
 ## ✅ O que foi feito
 
 ### 1. **Estrutura do Projeto**
-- Diretórioscom separação clara entre HTML, CSS e JavaScript
-- Criação de arquivos específicos: `marketplace.css` e `marketplace.js`
-- Estruturação do `index.html` do marketplace-página inicial.
+- Diretórios com separação clara entre HTML, CSS e JavaScript
+- Criação de arquivos específicos: `marketplace.css`, `marketplace.js`, `main.js` e arquivos css equivalentes. 
+- Estruturação do `index.html` do marketplace-página inicial - SPA.
 
 ### 2. **Header/Navegação**
 - Header sticky com fundo branco e sombra
 - Navegação centralizada com 5 links (Inicio, Vender, Comprar, Serviços, Sobre)
-- Links com efeito hover e sublinha animada (#ff335f)
+- Links com efeito hover de mudança de cor suave, padronizados com o botão "Entrar"
 - Botão "Entrar" alinhado à direita com ícone de usuário SVG
+- Submenus (Comprar, Vender, Serviços) com ativação por clique, garantindo consistência na interface - hover
+- Menu de serviços com link direto para consulta externa da **Tabela FIPE**
 
 ### 3. **Menu Dropdown de Login**
-- Menu hamburger que aparece ao clicar em "Entrar"
+- Menu dropdown que aparece ao clicar em "Entrar"
 - Opções: **Login** (cliente) e **Sou Lojista**
 - Cada opção com ícone identificador
 - Animação suave (fade + slide)
-- Fecha automaticamente ao clicar fora
+- Lógica de fechamento automático ao clicar fora ou ao abrir outro menu simultaneamente
 
 ### 4. **Seção Hero**
-- Título "Busque por ✨" com texto animado
-- Texto animado com gradiente (vermelho e roxo )
-- Troca entre frases: "SUV até R$100 mil usado", "Carros elétricos", "Utlitários"e"picape"
+- Título "Busque por " com texto animado e gradiente
+- Troca modelos: "SUV", "Carros elétricos", etc,.
 
 ### 5. **Search Bar**
-- Barra de busca centralizada
-- Ícone ✨ visual
-- Botão de busca com hover effect (escurece e aumenta)
+- Barra de busca por modelo, faixa de preço, região e ano de fabricação
+- Ícone visual
+- Botão de busca com hover
 - Responsivo em mobile
 
 ### 6. **Categorias de Filtro**
-- Botões: SUV, Sedan, Elétricos, Picapes, Utilitários
-- Hover effect com mudança de cor
+- Buscar por nome com auto completar - in progress
+- Selecionar marca
+- Faixa de preços
+- Região
+- Ano de fabricação
 
-### 7. **Carrossel de Veículos**
-- "Veículos em destaque" com scroll horizontal
+### 7. **Resultados encontrados**
+- Ordenar o resultado por: Mais Relevantes, menor preço, maior preço e mais novos
 - Cards com imagens reais (Unsplash)
-- Hover effect com elevação (transform: translateY)
-- Botões de navegação (prev/next) para scroll
 
-### 8. **Seção de Serviços**
-- Grid responsivo com 3 cards (Financiamento, Seguro Auto, Cadastre sua Loja)
+### 8. **Seção de cards**
+- Foto, nome do veiculo, valor, região, loja ou particular
 - Hover effect com elevação
 
 ### 9. **Footer**
-- Créditos e informações da plataforma
+- Créditos e informações da plataforma - in progress
 
 ### 10. **Responsividade**
 - Design adaptado para mobile (max-width: 900px)
 - Header em coluna em mobile
 - Busca em coluna em mobile
+
+### 11. **Acessibilidade e UX**
+- Implementação de atributos ARIA (`aria-expanded`, `aria-haspopup`, `aria-controls`) para melhor suporte a leitores de tela
+- Gerenciamento de foco e estados ativos via JavaScript
+- Suporte à tecla `Escape` para fechar menus dropdown de forma rápida
+- Skip link para navegação direta ao conteúdo principal
 
 ---
 
@@ -65,63 +73,28 @@ Nome sugerido--
 
 | Arquivo | Status | Descrição |
 |---------|--------|-----------|
-| `marketplace/index.html` | ✅ Atualizado | HTML limpo sem estilos inline |
-| `assets/css/marketplace.css` | ✅ Criado | Todos os estilos modernos |
-| `assets/js/marketplace.js` | ✅ Criado | Scripts (animação, carousel, dropdown) |
+| `index.html` | ✅ Atualizado | HTML limpo sem estilos inline |
+| `css` | ✅ Criado | Todos os estilos modernos |
+| `js`| ✅ Criado | Scripts (animação, dropdown) |
 
 ---
 
 ## 🚀 Próximos Passos
 
-- [ ] Criar páginas: `comprar.html`, `servicos.html`, `sobre.html`
-- [ ] Página de veículos com detalhes completos (`veiculo.html`)
+- [ ] Linkar as funcionalidades
+- [ ] Página de veículos com fotos baixadas
 - [ ] Painel do cliente com favoritos
 - [ ] Painel do lojista com dashboard
 
 ---
 
-## 📁 Estrutura de Diretórios
-
-```
-marketplace-veiculos/
-├── marketplace/
-│   └── index.html
-├── cliente/
-│   ├── login.html
-│   ├── cadastro.html
-│   ├── favoritos.html
-│   └── index.html
-├── lojista/
-│   ├── login.html
-│   ├── cadastro.html
-│   ├── dashboard.html
-│   └── cadastrar-veiculo.html
-├── admin/
-│   └── index.html
-└── assets/
-    ├── css/
-    │   ├── style.css
-    │   ├── marketplace.css
-    │   ├── cliente.css
-    │   ├── lojista.css
-    │   └── admin.css
-    ├── js/
-    │   ├── main.js
-    │   ├── marketplace.js
-    │   └── animation.js
-    └── images/
-```
-
----
-
 ## 🎨 Paleta de Cores
 
-- **Vermelho principal**: #ff335f
-- **Roxo Accent**: #7b4dff
-- **Cinza Claro**: #f4f6f8
-- **Cinza Escuro**: #2f2f39
-- **Branco**: #ffffff
-- **Preto**: #1f1f1f
+- **Azul petrólio**: #073b4c
+- **CTAs e destaques** #c65f21
+- **Preços/oportunidades/status positivos** #1f7a4d
+- **Botões Bootstrap (btn-dark, btn-primary, btn-outline-*)** seguem a nova paleta e contraste alto no texto dos botões
+- **Fundo/base**branco e neutros claros: #ffffff
 
 ---
 
@@ -136,8 +109,4 @@ marketplace-veiculos/
 ---
 
 ## 🔍 Notas Importantes
-
-- Todos os scripts estão em `marketplace.js`
-- Todos os estilos estão em `marketplace.css`
-- Imagens do carrossel usam URLs externas (Unsplash)
 - Responsividade testada para desktop e mobile

@@ -5,15 +5,14 @@ export default function animation() {
 
   const words = [
     'Carros elétricos',
-    'SUV',
-    'Sedans',
-    'Esportivos',
-    'Hatchbacks',
-    'Caminhonetes',
-    'Luxo',
-    'Compactos',
-    'Familiares',
-    'Conversiveis'
+  'SUVs',
+  'Sedans',
+  'Hatches',
+  'Picapes',
+  'Cupês',
+  'Peruas',
+  'Minivans',
+  'Conversíveis'
   ];
 
   let index = 0;
