@@ -2,6 +2,10 @@ import animation from './animation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     animation();
+<<<<<<< HEAD
+=======
+    syncLoginState();
+>>>>>>> 309e7ad (Ajuste dos links)
     initAccessibility();
     initRouter();
     initForms();
@@ -10,6 +14,50 @@ document.addEventListener('DOMContentLoaded', () => {
 const VKEY = 'buscarauto_vehicles_v1';
 const ACCESSIBILITY_KEY = 'buscarauto_accessibility_v1';
 const DEFAULT_ACCESSIBILITY = { fontSize: 100, highContrast: false };
+<<<<<<< HEAD
+=======
+const WKEY = 'buscarauto_wishlist_v1';
+const SESSION_KEY = 'buscarauto_session_v1';
+const PAGE_SIZE = 4;
+const DEFAULT_GALLERY = [
+    'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1550355291-bbee04a92027?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1549399542-7e3f8b79f84f?q=80&w=1200&auto=format&fit=crop'
+];
+
+let currentPage = 1;
+let currentDetailGallery = [];
+
+function getMarketplacePreset() {
+    const hash = location.hash || '#marketplace';
+    if (hash === '#marketplace-0km') return '0km';
+    if (hash === '#marketplace-usados') return 'usados';
+    if (hash === '#marketplace-seminovos') return 'seminovos';
+    return null;
+}
+
+function matchesMarketplacePreset(vehicle, preset) {
+    if (!preset) return true;
+
+    const km = numericValue(vehicle.km);
+    const year = Number(vehicle.year || 0);
+
+    if (preset === '0km') {
+        return km <= 1000 || (year >= 2023 && km <= 15000);
+    }
+
+    if (preset === 'usados') {
+        return km > 1000 && (km >= 50000 || year <= 2020);
+    }
+
+    if (preset === 'seminovos') {
+        return km > 1000 && km < 50000 && year >= 2021 && year <= 2024;
+    }
+
+    return true;
+}
+>>>>>>> 309e7ad (Ajuste dos links)
 
 function loadAccessibilitySettings() {
     try {
@@ -101,23 +149,279 @@ function seedIfEmpty() {
         { id: 'seed-gol', title: 'Volkswagen Gol 1.6', brand: 'Volkswagen', year: 2020, km: '45000', fuel: 'Gasolina', transmission: 'Manual', price: '69900', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop', description: 'Hatch acessivel, economico e com documentacao em dia.', color: 'Vermelho', location: 'Manaus - AM', agency: 'Via Norte Veiculos' },
         { id: 'seed-onix', title: 'Chevrolet Onix Plus LT 1.0', brand: 'Chevrolet', year: 2020, km: '15000', fuel: 'Gasolina', transmission: 'Automatico', price: '79900', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1200&auto=format&fit=crop', description: 'Compacto moderno, baixo consumo e otimo custo-beneficio.', color: 'Branco', location: 'Sao Paulo - SP', agency: 'Auto Leste' }
     ];
+<<<<<<< HEAD
     if (v.some(vehicle => vehicle.id === 'seed-corolla')) return;
     saveVehicles(v.length ? [...seed, ...v] : seed);
 }
 
+=======
+    if (v.some(vehicle => vehicle.id === 'seed-corolla')) {
+        if (!v.some(vehicle => vehicle.id === 'seed-camaro')) {
+            saveVehicles([seed[0], ...v]);
+        }
+        return;
+    }
+    saveVehicles(v.length ? [...seed, ...v] : seed);
+}
+
+function getSession() {
+    try {
+        return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+    } catch {
+        return null;
+    }
+}
+
+function saveSession(session) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+}
+
+function roleLabel(role) {
+    if (role === 'admin') return 'Admin';
+    if (role === 'seller') return 'Lojista';
+    if (role === 'client') return 'Cliente';
+    return 'Entrar';
+}
+
+function roleAvatar(role) {
+    if (role === 'admin') return 'A';
+    if (role === 'seller') return 'L';
+    if (role === 'client') return 'C';
+    return 'U';
+}
+
+function syncLoginState() {
+    const session = getSession();
+    const btn = document.getElementById('loginBtn');
+    const label = document.getElementById('loginBtnLabel');
+    const avatar = document.getElementById('loginAvatar');
+    const dropdown = document.getElementById('loginDropdown');
+    const logout = document.getElementById('logoutSessionLink');
+    if (btn) {
+        btn.setAttribute('data-role', session?.role || 'guest');
+        btn.setAttribute('aria-label', session ? `Sessão atual: ${roleLabel(session.role)}. Abrir opções` : 'Abrir opções de login');
+        btn.title = session ? `Sessão atual: ${roleLabel(session.role)}` : 'Abrir opções de login';
+    }
+    if (avatar) {
+        avatar.textContent = roleAvatar(session?.role);
+        avatar.setAttribute('data-role', session?.role || 'guest');
+    }
+    if (label) {
+        label.textContent = session ? `Sessão: ${roleLabel(session.role)}` : 'Entrar';
+    }
+    if (logout) {
+        logout.hidden = !session;
+    }
+    if (dropdown && !session) {
+        dropdown.classList.remove('session-active');
+    }
+}
+
+function setSessionFromHref(href) {
+    if (href === '#cliente') saveSession({ role: 'client', label: 'Cliente' });
+    if (href === '#cadastro-veiculo') saveSession({ role: 'seller', label: 'Lojista' });
+    if (href === '#admin') saveSession({ role: 'admin', label: 'Admin' });
+    syncLoginState();
+}
+
+function getVehicleGallery(vehicle) {
+    if (Array.isArray(vehicle.gallery) && vehicle.gallery.length) {
+        return vehicle.gallery;
+    }
+
+    if (vehicle.image) {
+        return [vehicle.image, ...DEFAULT_GALLERY].slice(0, 4);
+    }
+
+    return DEFAULT_GALLERY.slice();
+}
+
+function buildPreviewData(form) {
+    const fd = new FormData(form);
+    const title = fd.get('title') || 'Toyota Corolla XEi 2.0';
+    const brand = fd.get('brand') || 'Toyota';
+    const year = fd.get('year') || '2020';
+    const km = fd.get('km') || '48.000';
+    const fuel = fd.get('fuel') || 'Flex';
+    const transmission = fd.get('transmission') || 'Automatico';
+    const price = fd.get('price') || '96900';
+    const location = 'Sao Paulo - SP';
+    const image = String(fd.get('image') || '').trim();
+
+    return {
+        title: String(title),
+        brand: String(brand),
+        specs: `${year}/${year} - ${km} km - ${fuel} - ${transmission}`,
+        price: `R$ ${formatMoney(price)}`,
+        location,
+        image
+    };
+}
+
+function updateFormPreview() {
+    const form = document.getElementById('cadastroForm');
+    if (!form) return;
+
+    const preview = buildPreviewData(form);
+    const previewTitle = document.getElementById('previewTitle');
+    const previewSpecs = document.getElementById('previewSpecs');
+    const previewPrice = document.getElementById('previewPrice');
+    const previewLocation = document.getElementById('previewLocation');
+    const previewImage = document.getElementById('previewImage');
+
+    if (previewTitle) previewTitle.textContent = preview.title;
+    if (previewSpecs) previewSpecs.textContent = preview.specs;
+    if (previewPrice) previewPrice.textContent = preview.price;
+    if (previewLocation) previewLocation.textContent = preview.location;
+    if (previewImage) {
+        previewImage.style.backgroundImage = preview.image ? `url('${preview.image}')` : '';
+        previewImage.classList.toggle('has-image', Boolean(preview.image));
+    }
+}
+
+function getPaginationInfo(totalItems) {
+    const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return { totalPages, start, end: start + PAGE_SIZE };
+}
+
+function renderPagination(totalItems) {
+    const controls = document.getElementById('paginationControls');
+    if (!controls) return;
+
+    const { totalPages } = getPaginationInfo(totalItems);
+    if (totalItems <= PAGE_SIZE) {
+        controls.innerHTML = '';
+        return;
+    }
+
+    const prevDisabled = currentPage === 1 ? 'disabled' : '';
+    const nextDisabled = currentPage === totalPages ? 'disabled' : '';
+    controls.innerHTML = `
+        <button class="pagination-btn" data-page="${currentPage - 1}" ${prevDisabled}>Anterior</button>
+        <span class="pagination-status">Página ${currentPage} de ${totalPages}</span>
+        <button class="pagination-btn" data-page="${currentPage + 1}" ${nextDisabled}>Próxima</button>
+    `;
+}
+
+function getWishlist() {
+    try {
+        return JSON.parse(localStorage.getItem(WKEY) || '[]');
+    } catch {
+        return [];
+    }
+}
+
+function saveWishlist(arr) {
+    localStorage.setItem(WKEY, JSON.stringify(arr));
+}
+
+function toggleWishlist(id) {
+    const list = getWishlist();
+    const sid = String(id);
+    const idx = list.indexOf(sid);
+    if (idx === -1) list.push(sid);
+    else list.splice(idx, 1);
+    saveWishlist(list);
+}
+
+function isInWishlist(id) {
+    return getWishlist().includes(String(id));
+}
+
+function updateWishlistButtons() {
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        const id = btn.dataset.id;
+        const active = isInWishlist(id);
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', String(active));
+        btn.textContent = active ? '♥' : 'Fav';
+    });
+}
+
+function getFilteredVehicles() {
+    const all = getVehicles();
+    const search = (document.getElementById('searchInputMarca')?.value || document.getElementById('searchMarca')?.value || '').toLowerCase().trim();
+    const priceMin = numericValue(document.getElementById('priceMin')?.value);
+    const priceMaxRaw = document.getElementById('priceMax')?.value;
+    const priceMax = priceMaxRaw ? numericValue(priceMaxRaw) : Infinity;
+    const year = document.getElementById('filterYear')?.value || '';
+    const transmission = document.getElementById('filterTransmission')?.value || '';
+    const city = document.getElementById('filterCity')?.value || '';
+    const sortBy = document.getElementById('sortBy')?.value || 'relevance';
+    const marketplacePreset = getMarketplacePreset();
+
+    let filtered = all.filter(v => {
+        const title = (v.title || '').toLowerCase();
+        const brand = (v.brand || '').toLowerCase();
+        const price = numericValue(v.price);
+
+        if (search) {
+            if (!title.includes(search) && !brand.includes(search)) return false;
+        }
+        if (price && (price < priceMin || price > priceMax)) return false;
+        if (year && String(v.year) !== String(year)) return false;
+        if (transmission && v.transmission !== transmission) return false;
+        if (city && v.location && !v.location.toLowerCase().includes(city.toLowerCase())) return false;
+        if (!matchesMarketplacePreset(v, marketplacePreset)) return false;
+        return true;
+    });
+
+    switch (sortBy) {
+        case 'price-asc': filtered.sort((a,b) => numericValue(a.price) - numericValue(b.price)); break;
+        case 'price-desc': filtered.sort((a,b) => numericValue(b.price) - numericValue(a.price)); break;
+        case 'newest': filtered.sort((a,b) => (b.year||0) - (a.year||0)); break;
+        default: break;
+    }
+
+    return filtered;
+}
+
+>>>>>>> 309e7ad (Ajuste dos links)
 function renderMarketplace() {
     seedIfEmpty();
     const container = document.getElementById('vehiclesGrid');
     const countContainer = document.getElementById('resultCount');
+<<<<<<< HEAD
     if (!container) return;
 
     const vehicles = getVehicles();
+=======
+    const subtitle = document.querySelector('.marketplace-subtitle');
+    if (!container) return;
+
+    const marketplacePreset = getMarketplacePreset();
+    if (subtitle) {
+        subtitle.textContent = marketplacePreset === '0km'
+            ? 'Carros 0km.'
+            : marketplacePreset === 'usados'
+                ? 'Carros usados.'
+                : marketplacePreset === 'seminovos'
+                    ? 'Seminovos.'
+                    : 'Carros usados, novos e seminovos.';
+    }
+
+    const vehicles = getFilteredVehicles();
+>>>>>>> 309e7ad (Ajuste dos links)
     if (countContainer) {
         countContainer.textContent = vehicles.length;
     }
 
+<<<<<<< HEAD
     container.innerHTML = '';
     vehicles.slice(0, 8).forEach(v => {
+=======
+    const { start, end } = getPaginationInfo(vehicles.length);
+
+    container.innerHTML = '';
+    vehicles.slice(start, end).forEach(v => {
+>>>>>>> 309e7ad (Ajuste dos links)
         const card = document.createElement('article');
         card.className = 'marketplace-card';
         const locationDisplay = v.location || 'Sao Paulo - SP';
@@ -148,6 +452,11 @@ function renderMarketplace() {
         `;
         container.appendChild(card);
     });
+<<<<<<< HEAD
+=======
+    updateWishlistButtons();
+    renderPagination(vehicles.length);
+>>>>>>> 309e7ad (Ajuste dos links)
 }
 
 function renderVehicleDetail(id) {
@@ -161,6 +470,11 @@ function renderVehicleDetail(id) {
         return;
     }
 
+<<<<<<< HEAD
+=======
+    currentDetailGallery = getVehicleGallery(v);
+
+>>>>>>> 309e7ad (Ajuste dos links)
     container.innerHTML = `
         <div class="page-heading">
             <div>
@@ -172,8 +486,15 @@ function renderVehicleDetail(id) {
         </div>
         <div class="vehicle-detail-page">
             <div class="vehicle-gallery">
+<<<<<<< HEAD
                 <img src="${v.image || 'https://via.placeholder.com/1200x700'}" alt="${v.title}">
                 <div class="vehicle-thumbs"><span></span><span></span><span></span><span></span></div>
+=======
+                <img id="vehicleMainImage" src="${currentDetailGallery[0] || v.image || 'https://via.placeholder.com/1200x700'}" alt="${v.title}">
+                <div class="vehicle-thumbs" id="vehicleThumbs">
+                    ${currentDetailGallery.map((image, index) => `<button type="button" class="vehicle-thumb-btn${index === 0 ? ' active' : ''}" data-image="${image}" aria-label="Ver imagem ${index + 1}"><img src="${image}" alt="Imagem ${index + 1} de ${v.title}"></button>`).join('')}
+                </div>
+>>>>>>> 309e7ad (Ajuste dos links)
             </div>
             <aside class="vehicle-summary">
                 <section class="panel">
@@ -258,8 +579,89 @@ function renderAdminList() {
 }
 
 function initForms() {
+<<<<<<< HEAD
     const form = document.getElementById('cadastroForm');
     if (form) {
+=======
+    const anuncieForm = document.getElementById('anuncieForm');
+    if (anuncieForm) {
+        anuncieForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fd = new FormData(anuncieForm);
+            const email = String(fd.get('email') || '').trim();
+            const role = String(fd.get('role') || 'client');
+            const sessionRole = role === 'seller' ? 'seller' : 'client';
+            saveSession({ role: sessionRole, label: sessionRole === 'seller' ? 'Lojista' : 'Cliente', email });
+            syncLoginState();
+            // redirect according to role
+            if (sessionRole === 'seller') location.hash = '#cadastro-veiculo';
+            else location.hash = '#cliente';
+        });
+    }
+
+    const cadastroContaForm = document.getElementById('cadastroContaForm');
+    if (cadastroContaForm) {
+        cadastroContaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fd = new FormData(cadastroContaForm);
+            const password = String(fd.get('password') || '');
+            const confirmPassword = String(fd.get('confirmPassword') || '');
+
+            if (password !== confirmPassword) {
+                cadastroContaForm.querySelector('#cadastroConfirmacao')?.setCustomValidity('As senhas precisam ser iguais.');
+                cadastroContaForm.reportValidity();
+                cadastroContaForm.querySelector('#cadastroConfirmacao')?.setCustomValidity('');
+                return;
+            }
+
+            const firstName = String(fd.get('firstName') || '').trim();
+            const lastName = String(fd.get('lastName') || '').trim();
+            const email = String(fd.get('email') || '').trim();
+            const role = String(fd.get('role') || 'seller');
+            const sessionRole = role === 'seller' ? 'seller' : 'client';
+
+            saveSession({
+                role: sessionRole,
+                label: sessionRole === 'seller' ? 'Lojista' : 'Cliente',
+                name: `${firstName} ${lastName}`.trim(),
+                email
+            });
+            syncLoginState();
+            // redirect according to chosen role
+            if (sessionRole === 'seller') location.hash = '#cadastro-veiculo';
+            else location.hash = '#cliente';
+        });
+    }
+
+    const cadastreLojaForm = document.getElementById('cadastreLojaForm');
+    if (cadastreLojaForm) {
+        cadastreLojaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fd = new FormData(cadastreLojaForm);
+            const obj = Object.fromEntries(fd.entries());
+            // basic required validation handled by HTML, but ensure trimming
+            obj.id = `store-${Date.now()}`;
+            obj.registeredAt = new Date().toISOString();
+
+            try {
+                const key = 'buscarauto_stores_v1';
+                const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                existing.unshift(obj);
+                localStorage.setItem(key, JSON.stringify(existing));
+            } catch (err) {
+                console.error('Erro salvando loja', err);
+            }
+
+            // feedback simples e redirecionamento
+            alert('Cadastro enviado com sucesso. Em breve nossa equipe entrará em contato.');
+            location.hash = '#marketplace';
+        });
+    }
+
+    const form = document.getElementById('cadastroForm');
+    if (form) {
+        updateFormPreview();
+>>>>>>> 309e7ad (Ajuste dos links)
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const fd = new FormData(form);
@@ -276,12 +678,95 @@ function initForms() {
             renderMarketplace();
             location.hash = `#veiculo-${obj.id}`;
         });
+<<<<<<< HEAD
     }
 
     document.body.addEventListener('click', (e) => {
         const viewBtn = e.target.closest('.view-vehicle');
         if (viewBtn) {
             location.hash = `#veiculo-${viewBtn.dataset.id}`;
+=======
+
+        ['input', 'change'].forEach(eventName => {
+            form.addEventListener(eventName, updateFormPreview);
+        });
+    }
+
+    // Filters & controls: re-render on change
+    ['searchInputMarca','searchMarca','priceMin','priceMax','filterYear','filterTransmission','filterCity','sortBy'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const ev = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' ? 'input' : 'change';
+        el.addEventListener(ev, () => {
+            currentPage = 1;
+            renderMarketplace();
+        });
+    });
+
+    document.getElementById('clearFilters')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        // reset known controls
+        ['searchInputMarca','searchMarca','priceMin','priceMax','filterYear','filterTransmission','filterCity','sortBy'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (el.tagName === 'SELECT') el.selectedIndex = 0;
+            else el.value = '';
+        });
+        currentPage = 1;
+        renderMarketplace();
+    });
+
+    document.getElementById('loginDropdown')?.addEventListener('click', (e) => {
+        const item = e.target.closest('a');
+        if (!item) return;
+
+        const href = item.getAttribute('href');
+        if (item.id === 'logoutSessionLink') {
+            e.preventDefault();
+            clearSession();
+            syncLoginState();
+            return;
+        }
+
+        if (href === '#cliente' || href === '#cadastro-veiculo' || href === '#admin') {
+            setSessionFromHref(href);
+        }
+    });
+
+    document.getElementById('paginationControls')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.pagination-btn');
+        if (!btn || btn.disabled) return;
+        const nextPage = Number(btn.dataset.page);
+        if (Number.isNaN(nextPage)) return;
+        currentPage = nextPage;
+        renderMarketplace();
+    });
+
+    document.body.addEventListener('click', (e) => {
+        const thumbBtn = e.target.closest('.vehicle-thumb-btn');
+        if (thumbBtn) {
+            const mainImage = document.getElementById('vehicleMainImage');
+            if (mainImage && thumbBtn.dataset.image) {
+                mainImage.src = thumbBtn.dataset.image;
+                document.querySelectorAll('.vehicle-thumb-btn').forEach(btn => btn.classList.remove('active'));
+                thumbBtn.classList.add('active');
+            }
+            return;
+        }
+
+        const wishBtn = e.target.closest('.wishlist-btn');
+        if (wishBtn) {
+            e.preventDefault();
+            toggleWishlist(wishBtn.dataset.id);
+            updateWishlistButtons();
+            return;
+        }
+
+        const viewBtn = e.target.closest('.view-vehicle');
+        if (viewBtn) {
+            location.hash = `#veiculo-${viewBtn.dataset.id}`;
+            return;
+>>>>>>> 309e7ad (Ajuste dos links)
         }
 
         const delBtn = e.target.closest('.delete-vehicle');
@@ -291,6 +776,10 @@ function initForms() {
             saveVehicles(vehicles);
             renderAdminList();
             renderMarketplace();
+<<<<<<< HEAD
+=======
+            return;
+>>>>>>> 309e7ad (Ajuste dos links)
         }
     });
 }
@@ -335,14 +824,21 @@ function router() {
             break;
         case '#marketplace':
         case '#destaques':
+<<<<<<< HEAD
         case '#particular':
         case '#lojas-credenciadas':
+=======
+        case '#marketplace-0km':
+        case '#marketplace-usados':
+        case '#marketplace-seminovos':
+>>>>>>> 309e7ad (Ajuste dos links)
             seedIfEmpty();
             renderMarketplace();
             showLanding();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             break;
         case '#cadastro':
+<<<<<<< HEAD
         case '#cadastro-veiculo':
         case '#anuncie':
         case '#lojas-especializadas':
@@ -350,10 +846,32 @@ function router() {
             showView('cadastro-veiculo');
             break;
         case '#admin':
+=======
+        case '#anuncie':
+            showView('anuncie');
+            break;
+        case '#criar-conta':
+            showView('criar-conta');
+            break;
+        case '#cadastro-veiculo':
+        case '#lojas-especializadas':
+            setSessionFromHref('#cadastro-veiculo');
+            showView('cadastro-veiculo');
+            break;
+        case '#cadastre-loja':
+            showView('cadastre-loja');
+            break;
+        case '#admin':
+            setSessionFromHref('#admin');
+>>>>>>> 309e7ad (Ajuste dos links)
             showView('admin');
             renderAdminList();
             break;
         case '#cliente':
+<<<<<<< HEAD
+=======
+            setSessionFromHref('#cliente');
+>>>>>>> 309e7ad (Ajuste dos links)
             showView('cliente');
             break;
         case '#sobre':
