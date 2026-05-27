@@ -2,10 +2,6 @@ import animation from './animation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     animation();
-<<<<<<< HEAD
-=======
-    syncLoginState();
->>>>>>> 309e7ad (Ajuste dos links)
     initAccessibility();
     initRouter();
     initForms();
@@ -14,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
 const VKEY = 'buscarauto_vehicles_v1';
 const ACCESSIBILITY_KEY = 'buscarauto_accessibility_v1';
 const DEFAULT_ACCESSIBILITY = { fontSize: 100, highContrast: false };
-<<<<<<< HEAD
-=======
 const WKEY = 'buscarauto_wishlist_v1';
 const SESSION_KEY = 'buscarauto_session_v1';
 const PAGE_SIZE = 4;
@@ -57,7 +51,6 @@ function matchesMarketplacePreset(vehicle, preset) {
 
     return true;
 }
->>>>>>> 309e7ad (Ajuste dos links)
 
 function loadAccessibilitySettings() {
     try {
@@ -149,18 +142,7 @@ function seedIfEmpty() {
         { id: 'seed-gol', title: 'Volkswagen Gol 1.6', brand: 'Volkswagen', year: 2020, km: '45000', fuel: 'Gasolina', transmission: 'Manual', price: '69900', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop', description: 'Hatch acessivel, economico e com documentacao em dia.', color: 'Vermelho', location: 'Manaus - AM', agency: 'Via Norte Veiculos' },
         { id: 'seed-onix', title: 'Chevrolet Onix Plus LT 1.0', brand: 'Chevrolet', year: 2020, km: '15000', fuel: 'Gasolina', transmission: 'Automatico', price: '79900', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1200&auto=format&fit=crop', description: 'Compacto moderno, baixo consumo e otimo custo-beneficio.', color: 'Branco', location: 'Sao Paulo - SP', agency: 'Auto Leste' }
     ];
-<<<<<<< HEAD
     if (v.some(vehicle => vehicle.id === 'seed-corolla')) return;
-    saveVehicles(v.length ? [...seed, ...v] : seed);
-}
-
-=======
-    if (v.some(vehicle => vehicle.id === 'seed-corolla')) {
-        if (!v.some(vehicle => vehicle.id === 'seed-camaro')) {
-            saveVehicles([seed[0], ...v]);
-        }
-        return;
-    }
     saveVehicles(v.length ? [...seed, ...v] : seed);
 }
 
@@ -383,19 +365,13 @@ function getFilteredVehicles() {
     return filtered;
 }
 
->>>>>>> 309e7ad (Ajuste dos links)
 function renderMarketplace() {
     seedIfEmpty();
     const container = document.getElementById('vehiclesGrid');
     const countContainer = document.getElementById('resultCount');
-<<<<<<< HEAD
     if (!container) return;
 
-    const vehicles = getVehicles();
-=======
     const subtitle = document.querySelector('.marketplace-subtitle');
-    if (!container) return;
-
     const marketplacePreset = getMarketplacePreset();
     if (subtitle) {
         subtitle.textContent = marketplacePreset === '0km'
@@ -408,20 +384,14 @@ function renderMarketplace() {
     }
 
     const vehicles = getFilteredVehicles();
->>>>>>> 309e7ad (Ajuste dos links)
     if (countContainer) {
         countContainer.textContent = vehicles.length;
     }
 
-<<<<<<< HEAD
-    container.innerHTML = '';
-    vehicles.slice(0, 8).forEach(v => {
-=======
     const { start, end } = getPaginationInfo(vehicles.length);
 
     container.innerHTML = '';
     vehicles.slice(start, end).forEach(v => {
->>>>>>> 309e7ad (Ajuste dos links)
         const card = document.createElement('article');
         card.className = 'marketplace-card';
         const locationDisplay = v.location || 'Sao Paulo - SP';
@@ -452,11 +422,8 @@ function renderMarketplace() {
         `;
         container.appendChild(card);
     });
-<<<<<<< HEAD
-=======
     updateWishlistButtons();
     renderPagination(vehicles.length);
->>>>>>> 309e7ad (Ajuste dos links)
 }
 
 function renderVehicleDetail(id) {
@@ -470,11 +437,8 @@ function renderVehicleDetail(id) {
         return;
     }
 
-<<<<<<< HEAD
-=======
     currentDetailGallery = getVehicleGallery(v);
 
->>>>>>> 309e7ad (Ajuste dos links)
     container.innerHTML = `
         <div class="page-heading">
             <div>
@@ -486,15 +450,12 @@ function renderVehicleDetail(id) {
         </div>
         <div class="vehicle-detail-page">
             <div class="vehicle-gallery">
-<<<<<<< HEAD
                 <img src="${v.image || 'https://via.placeholder.com/1200x700'}" alt="${v.title}">
                 <div class="vehicle-thumbs"><span></span><span></span><span></span><span></span></div>
-=======
                 <img id="vehicleMainImage" src="${currentDetailGallery[0] || v.image || 'https://via.placeholder.com/1200x700'}" alt="${v.title}">
                 <div class="vehicle-thumbs" id="vehicleThumbs">
                     ${currentDetailGallery.map((image, index) => `<button type="button" class="vehicle-thumb-btn${index === 0 ? ' active' : ''}" data-image="${image}" aria-label="Ver imagem ${index + 1}"><img src="${image}" alt="Imagem ${index + 1} de ${v.title}"></button>`).join('')}
                 </div>
->>>>>>> 309e7ad (Ajuste dos links)
             </div>
             <aside class="vehicle-summary">
                 <section class="panel">
@@ -579,10 +540,6 @@ function renderAdminList() {
 }
 
 function initForms() {
-<<<<<<< HEAD
-    const form = document.getElementById('cadastroForm');
-    if (form) {
-=======
     const anuncieForm = document.getElementById('anuncieForm');
     if (anuncieForm) {
         anuncieForm.addEventListener('submit', (e) => {
@@ -661,7 +618,6 @@ function initForms() {
     const form = document.getElementById('cadastroForm');
     if (form) {
         updateFormPreview();
->>>>>>> 309e7ad (Ajuste dos links)
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const fd = new FormData(form);
@@ -678,19 +634,20 @@ function initForms() {
             renderMarketplace();
             location.hash = `#veiculo-${obj.id}`;
         });
-<<<<<<< HEAD
     }
 
     document.body.addEventListener('click', (e) => {
         const viewBtn = e.target.closest('.view-vehicle');
         if (viewBtn) {
             location.hash = `#veiculo-${viewBtn.dataset.id}`;
-=======
+            return;
+        }
+    });
 
-        ['input', 'change'].forEach(eventName => {
-            form.addEventListener(eventName, updateFormPreview);
-        });
-    }
+    // attach preview update handlers to the cadastro form
+    ['input', 'change'].forEach(eventName => {
+        form.addEventListener(eventName, updateFormPreview);
+    });
 
     // Filters & controls: re-render on change
     ['searchInputMarca','searchMarca','priceMin','priceMax','filterYear','filterTransmission','filterCity','sortBy'].forEach(id => {
@@ -766,7 +723,6 @@ function initForms() {
         if (viewBtn) {
             location.hash = `#veiculo-${viewBtn.dataset.id}`;
             return;
->>>>>>> 309e7ad (Ajuste dos links)
         }
 
         const delBtn = e.target.closest('.delete-vehicle');
@@ -776,10 +732,7 @@ function initForms() {
             saveVehicles(vehicles);
             renderAdminList();
             renderMarketplace();
-<<<<<<< HEAD
-=======
             return;
->>>>>>> 309e7ad (Ajuste dos links)
         }
     });
 }
@@ -824,54 +777,33 @@ function router() {
             break;
         case '#marketplace':
         case '#destaques':
-<<<<<<< HEAD
         case '#particular':
         case '#lojas-credenciadas':
-=======
         case '#marketplace-0km':
         case '#marketplace-usados':
         case '#marketplace-seminovos':
->>>>>>> 309e7ad (Ajuste dos links)
             seedIfEmpty();
             renderMarketplace();
             showLanding();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             break;
         case '#cadastro':
-<<<<<<< HEAD
         case '#cadastro-veiculo':
         case '#anuncie':
         case '#lojas-especializadas':
         case '#cadastre-loja':
             showView('cadastro-veiculo');
-            break;
-        case '#admin':
-=======
-        case '#anuncie':
-            showView('anuncie');
             break;
         case '#criar-conta':
             showView('criar-conta');
             break;
-        case '#cadastro-veiculo':
-        case '#lojas-especializadas':
-            setSessionFromHref('#cadastro-veiculo');
-            showView('cadastro-veiculo');
-            break;
-        case '#cadastre-loja':
-            showView('cadastre-loja');
-            break;
         case '#admin':
             setSessionFromHref('#admin');
->>>>>>> 309e7ad (Ajuste dos links)
             showView('admin');
             renderAdminList();
             break;
         case '#cliente':
-<<<<<<< HEAD
-=======
             setSessionFromHref('#cliente');
->>>>>>> 309e7ad (Ajuste dos links)
             showView('cliente');
             break;
         case '#sobre':
