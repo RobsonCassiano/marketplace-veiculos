@@ -10,7 +10,6 @@ navTriggers.forEach(trigger => {
   if (submenuId) {
     trigger.setAttribute('aria-controls', `submenu-${submenuId}`);
   }
-<<<<<<< HEAD
 
   trigger.addEventListener('click', (e) => {
     e.preventDefault();
@@ -29,8 +28,6 @@ navTriggers.forEach(trigger => {
       trigger.setAttribute('aria-expanded', 'true');
     }
   });
-=======
->>>>>>> 309e7ad (Ajuste dos links)
 });
 
 function closeAllMenus() {
