@@ -59,6 +59,13 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Fecha menus ao clicar em qualquer link de submenu ou dropdown (melhoria UX para SPA)
+document.querySelectorAll('.submenu-link, .dropdown-link').forEach(link => {
+  link.addEventListener('click', () => {
+    closeAllMenus();
+  });
+});
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeAllMenus();

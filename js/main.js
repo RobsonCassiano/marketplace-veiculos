@@ -29,6 +29,7 @@ function getMarketplacePreset() {
     if (hash === '#marketplace-0km') return '0km';
     if (hash === '#marketplace-usados') return 'usados';
     if (hash === '#marketplace-seminovos') return 'seminovos';
+    if (hash === '#marketplace-todos') return null;
     return null;
 }
 
@@ -825,10 +826,12 @@ function router() {
 
     switch (hash) {
         case '#inicio':
+            renderMarketplace();
             showLanding();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             break;
         case '#marketplace':
+        case '#marketplace-todos':
         case '#destaques':
         case '#particular':
         case '#lojas-credenciadas':
