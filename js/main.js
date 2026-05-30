@@ -1,4 +1,5 @@
 import animation from './animation.js';
+import { uploadParaCloudinary } from './cloudinary.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     animation();
@@ -627,27 +628,78 @@ function initForms() {
             obj.agency = 'Auto Norte Multimarcas';
             obj.location = 'Sao Paulo - SP';
 
+            // Coletar imagens da galeria das caixas da secao 3
+            const slots = document.querySelectorAll('.photo-strip > div:not(.upload-tile)');
+            const gallery = [];
+            slots.forEach(slot => {
+                const bg = slot.style.backgroundImage;
+                if (bg) {
+                    const url = bg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+                    gallery.push(url);
+                }
+            });
+            obj.gallery = gallery;
+            if (!obj.image && gallery.length > 0) obj.image = gallery[0];
+
             const vehicles = getVehicles();
             vehicles.unshift(obj);
             saveVehicles(vehicles);
+            
             form.reset();
+            // Limpar as caixas de imagens após a publicação
+            slots.forEach(slot => slot.style.backgroundImage = '');
+
             renderMarketplace();
-            location.hash = `#veiculo-${obj.id}`;
+            location.hash = '#marketplace';
         });
+
+        const uploadTile = document.getElementById('uploadTile');
+        const fileInput = document.getElementById('vehicleImageFile');
+        const imageInput = form.querySelector('input[name="image"]');
+
+        if (uploadTile && fileInput) {
+            uploadTile.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const originalText = uploadTile.textContent;
+                    uploadTile.textContent = 'Enviando...';
+                    try {
+                        const result = await uploadParaCloudinary(file);
+                        if (result.secure_url) {
+                            // Encontrar a primeira caixa vazia para mostrar a imagem na Seção 3
+                            const slots = document.querySelectorAll('.photo-strip > div:not(.upload-tile)');
+                            for (let slot of slots) {
+                                if (!slot.style.backgroundImage) {
+                                    slot.style.backgroundImage = `url('${result.secure_url}')`;
+                                    slot.style.backgroundSize = 'cover';
+                                    slot.style.backgroundPosition = 'center';
+                                    break;
+                                }
+                            }
+
+                            if (imageInput) {
+                                if (!imageInput.value) imageInput.value = result.secure_url;
+                                imageInput.dispatchEvent(new Event('input', { bubbles: true }));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Erro ao carregar para Cloudinary:', err);
+                        alert('Ocorreu um erro ao carregar a imagem. Verifique a conexão.');
+                    } finally {
+                        uploadTile.textContent = originalText;
+                    }
+                }
+            });
+        }
     }
 
-    document.body.addEventListener('click', (e) => {
-        const viewBtn = e.target.closest('.view-vehicle');
-        if (viewBtn) {
-            location.hash = `#veiculo-${viewBtn.dataset.id}`;
-            return;
-        }
-    });
-
     // attach preview update handlers to the cadastro form
-    ['input', 'change'].forEach(eventName => {
-        form.addEventListener(eventName, updateFormPreview);
-    });
+    if (form) {
+        ['input', 'change'].forEach(eventName => {
+            form.addEventListener(eventName, updateFormPreview);
+        });
+    }
 
     // Filters & controls: re-render on change
     ['searchInputMarca','searchMarca','priceMin','priceMax','filterYear','filterTransmission','filterCity','sortBy'].forEach(id => {
@@ -682,6 +734,7 @@ function initForms() {
             e.preventDefault();
             clearSession();
             syncLoginState();
+            location.hash = '#inicio';
             return;
         }
 
@@ -789,10 +842,14 @@ function router() {
             break;
         case '#cadastro':
         case '#cadastro-veiculo':
+            showView('cadastro-veiculo');
+            break;
         case '#anuncie':
+            showView('anuncie'); // Agora redireciona para a tela de login/auth
+            break;
         case '#lojas-especializadas':
         case '#cadastre-loja':
-            showView('cadastro-veiculo');
+            showView('cadastre-loja');
             break;
         case '#criar-conta':
             showView('criar-conta');

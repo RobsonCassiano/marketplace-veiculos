@@ -1,5 +1,8 @@
 /* Submenus da navegacao */
 
+const loginBtn = document.getElementById('loginBtn');
+const loginDropdown = document.getElementById('loginDropdown');
+
 const navTriggers = document.querySelectorAll('.nav-trigger');
 
 navTriggers.forEach(trigger => {
@@ -64,9 +67,6 @@ document.addEventListener('keydown', (e) => {
 
 /* Login dropdown */
 
-const loginBtn = document.getElementById('loginBtn');
-const loginDropdown = document.getElementById('loginDropdown');
-
 if (loginBtn && loginDropdown) {
   loginBtn.setAttribute('aria-haspopup', 'true');
   loginBtn.setAttribute('aria-expanded', 'false');
@@ -83,26 +83,6 @@ if (loginBtn && loginDropdown) {
   });
 }
 
-<<<<<<< HEAD
-/* Hamburger menu */
-
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const hamburgerMenu = document.getElementById('hamburgerMenu');
-
-if (hamburgerBtn && hamburgerMenu) {
-  hamburgerBtn.addEventListener('click', () => {
-    hamburgerMenu.classList.toggle('active');
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!hamburgerBtn.contains(e.target) && !hamburgerMenu.contains(e.target)) {
-      hamburgerMenu.classList.remove('active');
-    }
-  });
-}
-
-=======
->>>>>>> 309e7ad (Ajuste dos links)
 /* Carousel */
 
 const track = document.querySelector('.carousel-track');

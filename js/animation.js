@@ -1,32 +1,17 @@
-export default function animation() {
-  const animatedText = document.getElementById('animated-text');
+export default function initAnimation() {
+    const textElement = document.getElementById('animated-text');
+    if (!textElement) return;
 
-  if (!animatedText) return;
+    const phrases = ["SUVs", "Carros Elétricos", "Seminovos", "Sedans", "Hatchbacks"];
+    let i = 0;
 
-  const words = [
-    'Carros elétricos',
-  'SUVs',
-  'Sedans',
-  'Hatches',
-  'Picapes',
-  'Cupês',
-  'Peruas',
-  'Minivans',
-  'Conversíveis'
-  ];
-
-  let index = 0;
-
-  function changeText() {
-    animatedText.style.opacity = '0';
-
-    setTimeout(() => {
-      animatedText.textContent = words[index];
-      animatedText.style.opacity = '1';
-      index = (index + 1) % words.length;
-    }, 300);
-  }
-
-  changeText();
-  setInterval(changeText, 2500);
+    // Animação simples de troca de texto com fade
+    setInterval(() => {
+        textElement.style.opacity = 0;
+        setTimeout(() => {
+            i = (i + 1) % phrases.length;
+            textElement.textContent = phrases[i];
+            textElement.style.opacity = 1;
+        }, 300);
+    }, 3000);
 }

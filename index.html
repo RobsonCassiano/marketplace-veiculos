@@ -20,7 +20,9 @@
 
     <header class="header" role="banner">
 
-        <img src="images/slogan2.png" alt="BuscarAuto" class="logo">
+        <a href="#marketplace" class="logo-link" aria-label="Ir para a página inicial">
+            <img src="images/slogan2.png" alt="BuscarAuto" class="logo">
+        </a>
 
         <nav class="nav-center" aria-label="Navegação principal">
             <a href="#inicio" class="nav-link">Início</a>
@@ -64,11 +66,7 @@
                     </svg>
                 </button>
                 <div class="submenu" id="submenu-servicos" role="menu">
-<<<<<<< HEAD
                     <a href="#cadastre-loja" class="submenu-link" role="menuitem">
-=======
-                        <a href="#cadastre-loja" class="submenu-link" role="menuitem">
->>>>>>> 309e7ad (Ajuste dos links)
                         <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"></path>
                         </svg>
@@ -87,26 +85,18 @@
         </nav>
 
         <div class="nav-right">
-<<<<<<< HEAD
-
-                    <a href="#cadastre-loja" class="submenu-link" role="menuitem">on" id="fontIncrease" class="accessibility-btn" aria-label="Aumentar tamanho da fonte">A+</button>
+            <div class="accessibility-controls">
+                <button type="button" id="fontIncrease" class="accessibility-btn" aria-label="Aumentar tamanho da fonte">A+</button>
                 <button type="button" id="contrastToggle" class="accessibility-btn" aria-pressed="false" aria-label="Ativar modo de alto contraste">Contraste</button>
                 <button type="button" id="resetAccessibility" class="accessibility-btn" aria-label="Restaurar configurações padrão de acessibilidade">Reset</button>
             </div>
 
             <button class="login-btn" id="loginBtn" aria-haspopup="true" aria-expanded="false" aria-controls="loginDropdown">
-<<<<<<< HEAD
-
                 <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
                     <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
                 </svg>
-
-                Entrar
-=======
-                <span id="loginAvatar" class="login-avatar" aria-hidden="true">U</span>
-                <span id="loginBtnLabel" class="sr-only">Entrar</span>
->>>>>>> 309e7ad (Ajuste dos links)
+                <span id="loginBtnLabel">Entrar</span>
 
             </button>
 
@@ -124,12 +114,6 @@
                         </path>
                     </svg>
                     Sou Lojista
-                </a>
-                <a href="#admin" class="dropdown-link" role="menuitem">
-                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M12 2l8 4v6c0 5-3.4 9.7-8 10-4.6-.3-8-5-8-10V6l8-4zm0 2.2L6 7.1V12c0 3.8 2.4 7.3 6 7.9 3.6-.6 6-4.1 6-7.9V7.1l-6-2.9z"></path>
-                    </svg>
-                    Admin
                 </a>
                 <a href="#" id="logoutSessionLink" class="dropdown-link" role="menuitem">
                     Sair
@@ -237,11 +221,7 @@
                     <div class="filters-sidebar" role="region" aria-label="Filtros de veículos">
                         <div class="filters-header d-flex justify-content-between align-items-center mb-3">
                             <h3>Filtros</h3>
-<<<<<<< HEAD
-                            <a href="#" class="text-muted small">Limpar tudo</a>
-=======
                             <a href="#" id="clearFilters" class="text-muted small">Limpar tudo</a>
->>>>>>> 309e7ad (Ajuste dos links)
                         </div>
 
                         <!-- Filtro Marca -->
@@ -337,19 +317,13 @@
                         </div>
                     </div>
 
-<<<<<<< HEAD
-=======
                     <p class="marketplace-subtitle">Carros usados, novos e seminovos.</p>
 
->>>>>>> 309e7ad (Ajuste dos links)
                     <!-- Grid de Veículos -->
                     <div class="vehicles-grid" id="vehiclesGrid">
                         <!-- Cards serão inseridos pelo JavaScript -->
                     </div>
-<<<<<<< HEAD
-=======
                     <div id="paginationControls" class="pagination-controls" aria-label="Paginação dos veículos"></div>
->>>>>>> 309e7ad (Ajuste dos links)
                 </div>
             </div>
         </div>
@@ -465,7 +439,11 @@
                     <section class="panel">
                         <h3>3. Fotos do veiculo</h3>
                         <p class="muted">Adicione fotos reais do veiculo. Para este prototipo, use uma URL no campo de imagem.</p>
-                        <div class="photo-strip" aria-hidden="true"><div class="upload-tile">Adicionar fotos</div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div class="photo-strip">
+                            <div class="upload-tile" id="uploadTile" style="cursor: pointer;">Adicionar fotos</div>
+                            <input type="file" id="vehicleImageFile" accept="image/*" style="display: none;">
+                            <div></div><div></div><div></div><div></div><div></div>
+                        </div>
                     </section>
                     <div class="form-actions">
                         <button type="button" class="btn btn-outline-dark">Salvar rascunho</button>
@@ -476,19 +454,11 @@
                     <section class="panel">
                         <div class="panel-header"><h3>Pre-visualizacao</h3><span class="status-pill">Rascunho</span></div>
                         <div class="preview-card">
-<<<<<<< HEAD
-                            <div class="preview-image"></div>
-                            <strong>Toyota Corolla XEi 2.0</strong>
-                            <span>2020/2020 - 48.000 km - Flex - Automatico</span>
-                            <b>R$ 96.900</b>
-                            <small>Sao Paulo - SP</small>
-=======
                             <div class="preview-image" id="previewImage"></div>
                             <strong id="previewTitle">Toyota Corolla XEi 2.0</strong>
                             <span id="previewSpecs">2020/2020 - 48.000 km - Flex - Automatico</span>
                             <b id="previewPrice">R$ 96.900</b>
                             <small id="previewLocation">Sao Paulo - SP</small>
->>>>>>> 309e7ad (Ajuste dos links)
                         </div>
                     </section>
                     <section class="panel contact-card">
@@ -505,8 +475,6 @@
             <div id="veiculo-detail"></div>
         </section>
 
-<<<<<<< HEAD
-=======
         <section id="anuncie" class="view app-view auth-view" aria-labelledby="anuncie-title" hidden>
             <div class="auth-shell">
                 <div class="page-heading auth-heading">
@@ -653,7 +621,6 @@
             </div>
         </section>
 
->>>>>>> 309e7ad (Ajuste dos links)
         <section id="admin" class="view app-view admin-dashboard" aria-labelledby="admin-title" hidden>
             <div class="app-shell">
                 <aside class="app-sidebar" aria-label="Menu do admin">
