@@ -87,6 +87,7 @@
         <div class="nav-right">
             <div class="accessibility-controls">
                 <button type="button" id="fontIncrease" class="accessibility-btn" aria-label="Aumentar tamanho da fonte">A+</button>
+                <button type="button" id="fontDecrease" class="accessibility-btn" aria-label="Diminuir tamanho da fonte">A-</button>
                 <button type="button" id="contrastToggle" class="accessibility-btn" aria-pressed="false" aria-label="Ativar modo de alto contraste">Contraste</button>
                 <button type="button" id="resetAccessibility" class="accessibility-btn" aria-label="Restaurar configurações padrão de acessibilidade">Reset</button>
             </div>
@@ -108,7 +109,7 @@
                     </svg>
                     Area do Cliente
                 </a>
-                <a href="#anuncie" class="dropdown-link" role="menuitem">
+                <a href="#lojista" class="dropdown-link" role="menuitem">
                     <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-4h2v18h-2z" fill="currentColor">
                         </path>
@@ -394,6 +395,11 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section id="lojista" class="view app-view lojista-dashboard" aria-labelledby="lojista-title" hidden>
+            <!-- O conteúdo deste dashboard é gerado dinamicamente pela função renderLojistaDashboard() no main.js -->
+            <div id="lojista-content"></div>
         </section>
 
         <section id="cadastro-veiculo" class="view app-view" aria-labelledby="cadastro-title" hidden>

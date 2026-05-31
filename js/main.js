@@ -13,7 +13,11 @@ const ACCESSIBILITY_KEY = 'buscarauto_accessibility_v1';
 const DEFAULT_ACCESSIBILITY = { fontSize: 100, highContrast: false };
 const WKEY = 'buscarauto_wishlist_v1';
 const SESSION_KEY = 'buscarauto_session_v1';
-const PAGE_SIZE = 4;
+const CLIENTS_KEY = 'buscarauto_clients_v1';
+const PROPOSALS_KEY = 'buscarauto_proposals_v1';
+const MAX_CLIENTS = 5;
+const MAX_FAVORITES = 3;
+const PAGE_SIZE = 6;
 const DEFAULT_GALLERY = [
     'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
@@ -27,9 +31,8 @@ let currentDetailGallery = [];
 function getMarketplacePreset() {
     const hash = location.hash || '#marketplace';
     if (hash === '#marketplace-0km') return '0km';
-    if (hash === '#marketplace-usados') return 'usados';
     if (hash === '#marketplace-seminovos') return 'seminovos';
-    if (hash === '#marketplace-todos') return null;
+    if (hash === '#marketplace-todos') return 'todos';
     return null;
 }
 
@@ -40,15 +43,15 @@ function matchesMarketplacePreset(vehicle, preset) {
     const year = Number(vehicle.year || 0);
 
     if (preset === '0km') {
-        return km <= 1000 || (year >= 2023 && km <= 15000);
-    }
-
-    if (preset === 'usados') {
-        return km > 1000 && (km >= 50000 || year <= 2020);
+        return km <= 0 || (year >= 2026 && km <= 0); // Permitir 0km com ano futuro, considerando pré-lançamentos e anúncios antecipados 
     }
 
     if (preset === 'seminovos') {
-        return km > 1000 && km < 50000 && year >= 2021 && year <= 2024;
+        return km > 1000 && (km >= 50000 || year <= 2025); // Permitir seminovos com até 50.000 km ou ano até 2025, considerando veículos mais rodados ou de anos anteriores que ainda são considerados seminovos no mercado brasileiro
+    }
+
+    if (preset === 'todos') {
+        return true; // "Todos" não deve filtrar por KM ou Ano, apenas mostrar tudo o que está no banco
     }
 
     return true;
@@ -164,6 +167,22 @@ function clearSession() {
     localStorage.removeItem(SESSION_KEY);
 }
 
+function getClients() {
+    return JSON.parse(localStorage.getItem(CLIENTS_KEY) || '[]');
+}
+
+function saveClients(arr) {
+    localStorage.setItem(CLIENTS_KEY, JSON.stringify(arr));
+}
+
+function getProposals() {
+    return JSON.parse(localStorage.getItem(PROPOSALS_KEY) || '[]');
+}
+
+function saveProposals(arr) {
+    localStorage.setItem(PROPOSALS_KEY, JSON.stringify(arr));
+}
+
 function roleLabel(role) {
     if (role === 'admin') return 'Admin';
     if (role === 'seller') return 'Lojista';
@@ -196,6 +215,12 @@ function syncLoginState() {
     }
     if (label) {
         label.textContent = session ? `Sessão: ${roleLabel(session.role)}` : 'Entrar';
+        if (session && session.name) {
+            const firstName = session.name.trim().split(' ')[0];
+            label.textContent = `Olá, ${firstName}`;
+        } else {
+            label.textContent = session ? `Sessão: ${roleLabel(session.role)}` : 'Entrar';
+        }
     }
     if (logout) {
         logout.hidden = !session;
@@ -206,9 +231,14 @@ function syncLoginState() {
 }
 
 function setSessionFromHref(href) {
-    if (href === '#cliente') saveSession({ role: 'client', label: 'Cliente' });
-    if (href === '#cadastro-veiculo') saveSession({ role: 'seller', label: 'Lojista' });
-    if (href === '#admin') saveSession({ role: 'admin', label: 'Admin' });
+    const current = getSession();
+    // Só cria uma sessão genérica se não houver uma sessão ativa com dados reais
+    if (current && current.name) return;
+
+    if (href === '#cliente') saveSession({ role: 'client', label: 'Cliente', name: 'Usuário Cliente', email: 'cliente@exemplo.com' });
+    if (href === '#lojista') saveSession({ role: 'seller', label: 'Lojista', name: 'Auto Norte', email: 'contato@autonorte.com' });
+    if (href === '#cadastro-veiculo') saveSession({ role: 'seller', label: 'Lojista', name: 'Lojista', email: 'loja@exemplo.com' });
+    if (href === '#admin') saveSession({ role: 'admin', label: 'Admin', name: 'Administrador' });
     syncLoginState();
 }
 
@@ -310,7 +340,13 @@ function toggleWishlist(id) {
     const list = getWishlist();
     const sid = String(id);
     const idx = list.indexOf(sid);
-    if (idx === -1) list.push(sid);
+    if (idx === -1) {
+        if (list.length >= MAX_FAVORITES) {
+            alert(`Limite de protótipo: Você pode favoritar apenas ${MAX_FAVORITES} veículos.`);
+            return;
+        }
+        list.push(sid);
+    }
     else list.splice(idx, 1);
     saveWishlist(list);
 }
@@ -378,11 +414,9 @@ function renderMarketplace() {
     if (subtitle) {
         subtitle.textContent = marketplacePreset === '0km'
             ? 'Carros 0km.'
-            : marketplacePreset === 'usados'
-                ? 'Carros usados.'
-                : marketplacePreset === 'seminovos'
-                    ? 'Seminovos.'
-                    : 'Carros usados, novos e seminovos.';
+            : marketplacePreset === 'seminovos'
+                ? 'Seminovos.'
+                : 'Carros usados, novos e seminovos.';
     }
 
     const vehicles = getFilteredVehicles();
@@ -440,6 +474,8 @@ function renderVehicleDetail(id) {
     }
 
     currentDetailGallery = getVehicleGallery(v);
+    const session = getSession();
+    const btnLabel = session ? 'Enviar mensagem' : 'Entre para contatar';
 
     container.innerHTML = `
         <div class="page-heading">
@@ -482,7 +518,7 @@ function renderVehicleDetail(id) {
                     <strong>${v.agency || 'Auto Norte Multimarcas'}</strong>
                     <span>WhatsApp: (11) 99999-9999</span>
                     <span>Telefone: (11) 3333-3333</span>
-                    <button class="btn btn-dark">Enviar mensagem</button>
+                    <button class="btn btn-dark contact-agency-btn" data-agency="${v.agency || 'Auto Norte Multimarcas'}">${btnLabel}</button>
                 </section>
             </aside>
         </div>
@@ -535,10 +571,209 @@ function renderAdminList() {
             </div>
             <div class="action-buttons">
                 <a class="btn btn-sm btn-outline-dark" href="#veiculo-${v.id}">Ver</a>
+                <button class="btn btn-sm btn-outline-dark edit-vehicle" data-id="${v.id}">Editar</button>
                 <button class="btn btn-sm btn-danger delete-vehicle" data-id="${v.id}">Excluir</button>
             </div>
         </div>
     `).join('');
+}
+
+function renderLojistaDashboard() {
+    const session = getSession();
+    const container = document.getElementById('lojista');
+    if (!container || !session) return;
+
+    const allVehicles = getVehicles();
+    const myVehicles = allVehicles.filter(v => v.agency === session.name || v.agency === 'Auto Norte Multimarcas');
+    const myProposals = getProposals().filter(p => p.agency === session.name || p.agency === 'Auto Norte Multimarcas');
+    const activeCount = myVehicles.length;
+    const planLimit = 15;
+
+    container.innerHTML = `
+        <!-- Navegação Superior Estilo Wireframe -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3 mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#inicio">
+                    <div class="bg-light border p-2 me-2 d-flex align-items-center justify-content-center" style="width:45px;height:45px;border-radius:4px;">
+                        <span style="font-size:1.2rem;">🏢</span>
+                    </div>
+                    <div>
+                        <strong class="d-block" style="line-height:1.2; font-size:1.1rem;">${session.name}</strong>
+                        <small class="text-muted" style="font-size:0.75rem; font-weight:600;">Agência</small>
+                    </div>
+                </a>
+                <div class="ms-auto d-flex align-items-center gap-4">
+                    <a href="#lojista" class="text-decoration-none text-dark fw-bold border-bottom border-dark border-2 pb-1">🚗 Meu Estoque</a>
+                    <a href="#mensagens" class="text-decoration-none text-muted fw-semibold">💬 Mensagens <span class="badge bg-light text-dark border ms-1">${myProposals.length}</span></a>
+                    <a href="#perfil" class="text-decoration-none text-muted fw-semibold">👤 Meu Perfil</a>
+                    <a href="#inicio" id="logoutLojistaNav" class="text-decoration-none text-muted fw-semibold">↪️ Sair</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4">
+            <!-- Cabeçalho de Boas-vindas -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1" style="color: var(--color-primary);">Bem-vinda, Agência ${session.name}</h2>
+                    <p class="text-muted">Acompanhe o desempenho dos seus anúncios e gerencie seu estoque.</p>
+                </div>
+                <a href="#cadastro-veiculo" class="btn btn-dark py-2 px-4 fw-bold">
+                    <span class="me-2">+</span> Cadastrar Veículo
+                </a>
+            </div>
+
+            <!-- Cards de Métricas -->
+            <div class="row g-3 mb-5">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm p-3" style="border-radius:12px;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;">🚗</div>
+                            <div>
+                                <small class="text-muted d-block fw-semibold">Veículos Ativos</small>
+                                <strong class="fs-4 d-block">${activeCount}</strong>
+                                <small class="text-muted" style="font-size:0.75rem;">de ${planLimit} disponíveis</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm p-3" style="border-radius:12px;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;">👁️</div>
+                            <div>
+                                <small class="text-muted d-block fw-semibold">Visualizações no mês</small>
+                                <strong class="fs-4 d-block">1.248</strong>
+                                <small class="text-success fw-bold" style="font-size:0.75rem;">↗ +18% <span class="text-muted fw-normal">vs mês anterior</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm p-3" style="border-radius:12px;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;">💬</div>
+                            <div>
+                                <small class="text-muted d-block fw-semibold">Mensagens recebidas</small>
+                                <strong class="fs-4 d-block">${myProposals.length}</strong>
+                                <small class="text-muted" style="font-size:0.75rem;">3 não lidas</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm p-3" style="border-radius:12px;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;">🛡️</div>
+                            <div>
+                                <small class="text-muted d-block fw-semibold">Status do Plano</small>
+                                <strong class="fs-4 d-block">Profissional</strong>
+                                <small class="text-muted" style="font-size:0.75rem;">Renova em 15/06/2026</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Tabela de Veículos (Lado Esquerdo) -->
+                <div class="col-lg-9">
+                    <div class="card border-0 shadow-sm border-radius-12 mb-4">
+                        <div class="card-header bg-white border-0 py-4 px-4">
+                            <h5 class="fw-bold mb-0">Meus Veículos</h5>
+                        </div>
+                        <div class="card-body px-4 pt-0">
+                            <div class="d-flex gap-2 mb-4">
+                                <input type="text" class="form-control w-25 shadow-none" placeholder="Buscar veículo">
+                                <select class="form-select w-auto ms-auto shadow-none"><option>Status: Todos</option></select>
+                                <select class="form-select w-auto shadow-none"><option>Ordenar: Mais recentes</option></select>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle border-top">
+                                    <thead class="text-muted small text-uppercase fw-bold">
+                                        <tr>
+                                            <th>Veículo</th>
+                                            <th>Ano</th>
+                                            <th>Preço</th>
+                                            <th>Status</th>
+                                            <th>Visualizações</th>
+                                            <th class="text-end">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${myVehicles.map(v => `
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <img src="${v.image}" class="rounded shadow-sm" style="width:60px;height:40px;object-fit:cover;">
+                                                        <div>
+                                                            <div class="fw-bold text-dark">${v.title}</div>
+                                                            <small class="text-muted">${v.fuel} • ${v.transmission}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-muted">${v.year}/${v.year}</td>
+                                                <td class="fw-bold text-dark">R$ ${formatMoney(v.price)}</td>
+                                                <td><span class="badge bg-success-soft text-success border px-3 py-2" style="background:#eef7f2; border-color:#d4e9df !important; border-radius:6px;">Ativo</span></td>
+                                                <td class="text-muted">${Math.floor(Math.random() * 500)}</td>
+                                                <td class="text-end">
+                                                    <div class="d-flex gap-2 justify-content-end">
+                                                        <button class="btn btn-outline-dark btn-sm px-3 edit-vehicle" data-id="${v.id}">Editar</button>
+                                                        <button class="btn btn-light btn-sm border px-3">Pausar</button>
+                                                        <button class="btn btn-light btn-sm border px-2">⋮</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painéis Laterais (Lado Direito) -->
+                <div class="col-lg-3">
+                    <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:12px;">
+                        <h6 class="fw-bold mb-3">Uso do Plano</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <small class="fw-bold">${activeCount} / ${planLimit} anúncios</small>
+                        </div>
+                        <div class="progress mb-3" style="height: 10px; border-radius:5px;">
+                            <div class="progress-bar bg-dark" style="width: ${(activeCount/planLimit)*100}%"></div>
+                        </div>
+                        <small class="text-muted d-block mb-3">Você pode cadastrar mais ${planLimit - activeCount} veículos.</small>
+                        <button class="btn btn-outline-dark w-100 btn-sm fw-bold py-2">Ver detalhes do plano</button>
+                    </div>
+
+                    <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:12px;">
+                        <h6 class="fw-bold mb-3">Atalhos Rápidos</h6>
+                        <div class="d-grid gap-3">
+                            <a href="#cadastro-veiculo" class="text-decoration-none text-dark small fw-semibold">+ Cadastrar Veículo</a>
+                            <a href="#lojista" class="text-decoration-none text-dark small fw-semibold">🚗 Ver meu estoque</a>
+                            <a href="#mensagens" class="text-decoration-none text-dark small fw-semibold">💬 Mensagens</a>
+                            <a href="#desempenho" class="text-decoration-none text-dark small fw-semibold">📈 Desempenho</a>
+                            <a href="#ajuda" class="text-decoration-none text-dark small fw-semibold">❓ Ajuda e Dúvidas</a>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm p-4 text-center" style="border-radius:12px; background: #fffaf5; border: 1px solid #ffe8d1 !important;">
+                        <div class="mb-2" style="font-size:1.5rem;">💡</div>
+                        <h6 class="fw-bold mb-2">Dicas para vender mais</h6>
+                        <p class="small text-muted mb-3">Complete todas as informações do seu veículo e adicione boas fotos.</p>
+                        <button class="btn btn-outline-dark btn-sm w-100 fw-bold">Ver dicas</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('logoutLojistaNav')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearSession();
+        syncLoginState();
+        location.hash = '#inicio';
+    });
 }
 
 function initForms() {
@@ -550,10 +785,16 @@ function initForms() {
             const email = String(fd.get('email') || '').trim();
             const role = String(fd.get('role') || 'client');
             const sessionRole = role === 'seller' ? 'seller' : 'client';
-            saveSession({ role: sessionRole, label: sessionRole === 'seller' ? 'Lojista' : 'Cliente', email });
+            saveSession({ 
+                role: sessionRole, 
+                label: sessionRole === 'seller' ? 'Lojista' : 'Cliente', 
+                email: email,
+                name: email.split('@')[0], // Nome provisório baseado no e-mail
+                image: null 
+            });
             syncLoginState();
             // redirect according to role
-            if (sessionRole === 'seller') location.hash = '#cadastro-veiculo';
+            if (sessionRole === 'seller') location.hash = '#lojista';
             else location.hash = '#cliente';
         });
     }
@@ -566,6 +807,13 @@ function initForms() {
             const password = String(fd.get('password') || '');
             const confirmPassword = String(fd.get('confirmPassword') || '');
 
+            const clients = getClients();
+            const role = String(fd.get('role') || 'seller');
+            if (role === 'client' && clients.length >= MAX_CLIENTS) {
+                alert('Limite de 5 clientes atingido para este protótipo.');
+                return;
+            }
+
             if (password !== confirmPassword) {
                 cadastroContaForm.querySelector('#cadastroConfirmacao')?.setCustomValidity('As senhas precisam ser iguais.');
                 cadastroContaForm.reportValidity();
@@ -576,18 +824,25 @@ function initForms() {
             const firstName = String(fd.get('firstName') || '').trim();
             const lastName = String(fd.get('lastName') || '').trim();
             const email = String(fd.get('email') || '').trim();
-            const role = String(fd.get('role') || 'seller');
             const sessionRole = role === 'seller' ? 'seller' : 'client';
 
-            saveSession({
+            const newUser = {
                 role: sessionRole,
                 label: sessionRole === 'seller' ? 'Lojista' : 'Cliente',
                 name: `${firstName} ${lastName}`.trim(),
-                email
-            });
+                email,
+                image: null
+            };
+
+            if (sessionRole === 'client') {
+                clients.push(newUser);
+                saveClients(clients);
+            }
+
+            saveSession(newUser);
             syncLoginState();
             // redirect according to chosen role
-            if (sessionRole === 'seller') location.hash = '#cadastro-veiculo';
+            if (sessionRole === 'seller') location.hash = '#lojista';
             else location.hash = '#cliente';
         });
     }
@@ -624,31 +879,43 @@ function initForms() {
             e.preventDefault();
             const fd = new FormData(form);
             const obj = Object.fromEntries(fd.entries());
+            const editId = form.dataset.editId;
+            
             obj.features = fd.getAll('features');
-            obj.id = Date.now();
             obj.agency = 'Auto Norte Multimarcas';
             obj.location = 'Sao Paulo - SP';
 
-            // Coletar imagens da galeria das caixas da secao 3
             const slots = document.querySelectorAll('.photo-strip > div:not(.upload-tile)');
             const gallery = [];
             slots.forEach(slot => {
                 const bg = slot.style.backgroundImage;
                 if (bg) {
-                    const url = bg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+                    const url = bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
                     gallery.push(url);
                 }
             });
             obj.gallery = gallery;
-            if (!obj.image && gallery.length > 0) obj.image = gallery[0];
 
-            const vehicles = getVehicles();
-            vehicles.unshift(obj);
+            let vehicles = getVehicles();
+
+            if (editId) {
+                obj.id = editId;
+                vehicles = vehicles.map(v => String(v.id) === String(editId) ? { ...v, ...obj } : v);
+                delete form.dataset.editId;
+                form.querySelector('button[type="submit"]').textContent = 'Publicar anuncio';
+            } else {
+                obj.id = Date.now();
+                if (!obj.image && gallery.length > 0) obj.image = gallery[0];
+                vehicles.unshift(obj);
+            }
+
             saveVehicles(vehicles);
             
             form.reset();
-            // Limpar as caixas de imagens após a publicação
-            slots.forEach(slot => slot.style.backgroundImage = '');
+            slots.forEach(slot => {
+                slot.style.backgroundImage = '';
+                slot.innerHTML = '';
+            });
 
             renderMarketplace();
             location.hash = '#marketplace';
@@ -675,6 +942,8 @@ function initForms() {
                                     slot.style.backgroundImage = `url('${result.secure_url}')`;
                                     slot.style.backgroundSize = 'cover';
                                     slot.style.backgroundPosition = 'center';
+                                    slot.style.position = 'relative';
+                                    slot.innerHTML = '<button type="button" class="remove-img-btn" style="position:absolute; top:2px; right:2px; background:rgba(255,0,0,0.7); color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center;">&times;</button>';
                                     break;
                                 }
                             }
@@ -739,7 +1008,7 @@ function initForms() {
             return;
         }
 
-        if (href === '#cliente' || href === '#cadastro-veiculo' || href === '#admin') {
+        if (href === '#cliente' || href === '#lojista' || href === '#cadastro-veiculo' || href === '#admin') {
             setSessionFromHref(href);
         }
     });
@@ -765,11 +1034,73 @@ function initForms() {
             return;
         }
 
+        const contactBtn = e.target.closest('.contact-agency-btn');
+        if (contactBtn) {
+            const session = getSession();
+            if (!session) {
+                location.hash = '#anuncie';
+                return;
+            }
+            
+            const agency = contactBtn.dataset.agency;
+            const vehicleTitle = document.getElementById('veiculo-title')?.textContent || 'Veículo';
+            const proposals = getProposals();
+            proposals.push({
+                id: Date.now(),
+                clientEmail: session.email,
+                agency: agency,
+                message: `Olá, tenho interesse no veículo ${vehicleTitle}. Por favor, entre em contato.`,
+                date: new Date().toLocaleDateString()
+            });
+            saveProposals(proposals);
+            alert(`Sua proposta para "${vehicleTitle}" foi enviada com sucesso!`);
+            location.hash = '#cliente';
+            return;
+        }
+
         const wishBtn = e.target.closest('.wishlist-btn');
         if (wishBtn) {
             e.preventDefault();
             toggleWishlist(wishBtn.dataset.id);
             updateWishlistButtons();
+            return;
+        }
+
+        const removeImgBtn = e.target.closest('.remove-img-btn');
+        if (removeImgBtn) {
+            const slot = removeImgBtn.parentElement;
+            slot.style.backgroundImage = '';
+            slot.innerHTML = '';
+            updateFormPreview();
+            return;
+        }
+
+        const editBtn = e.target.closest('.edit-vehicle');
+        if (editBtn) {
+            const id = editBtn.dataset.id;
+            const v = getVehicles().find(x => String(x.id) === String(id));
+            if (v) {
+                location.hash = '#cadastro-veiculo';
+                const form = document.getElementById('cadastroForm');
+                form.dataset.editId = v.id;
+                
+                // Preencher campos simples
+                Object.keys(v).forEach(key => {
+                    const input = form.querySelector(`[name="${key}"]`);
+                    if (input && input.type !== 'checkbox' && input.type !== 'file') {
+                        input.value = v[key];
+                    }
+                });
+
+                // Preencher checkboxes de features
+                const features = v.features || [];
+                form.querySelectorAll('input[name="features"]').forEach(ck => {
+                    ck.checked = features.includes(ck.value);
+                });
+
+                form.querySelector('button[type="submit"]').textContent = 'Salvar Alterações';
+                updateFormPreview();
+            }
             return;
         }
 
@@ -788,6 +1119,170 @@ function initForms() {
             renderMarketplace();
             return;
         }
+    });
+}
+
+function renderClientDashboard() {
+    const session = getSession();
+    const container = document.getElementById('cliente'); 
+    if (!container || !session) return;
+
+    const wishlist = getWishlist();
+    const allVehicles = getVehicles();
+    const favVehicles = allVehicles.filter(v => wishlist.includes(String(v.id)));
+    const favAgencies = [...new Set(favVehicles.map(v => v.agency || 'Auto Norte Multimarcas'))];
+    const myProposals = getProposals().filter(p => p.clientEmail === session.email);
+    const displayName = session.name || 'Usuário';
+
+    container.innerHTML = `
+        <div class="app-shell">
+            <aside class="app-sidebar">
+                <div class="app-brand-card">
+                    <div class="avatar" id="profileAvatarDisplay">${session.image ? `<img src="${session.image}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : displayName[0].toUpperCase()}</div>
+                    <div>
+                        <strong>${displayName}</strong>
+                        <small>${session.email}</small>
+                    </div>
+                </div>
+                <nav>
+                    <a href="#cliente" class="active">Meu Painel</a>
+                    <a href="#marketplace">Buscar Veículos</a>
+                    <a href="#inicio" id="logoutDashboard">Sair</a>
+                </nav>
+            </aside>
+
+            <main class="app-main">
+                <div class="page-heading">
+                    <h2>Olá, ${displayName.split(' ')[0]}</h2>
+                    <p>Gerencie seu perfil, favoritos e propostas.</p>
+                </div>
+
+                <div class="two-column-layout">
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Editar Perfil</h3>
+                        </div>
+                        <form id="editProfileForm" class="auth-form">
+                            <div class="auth-field">
+                                <label>Foto de Perfil</label>
+                                <input type="file" id="profilePhotoInput" class="form-control" accept="image/*">
+                            </div>
+                            <div class="auth-field">
+                                <label>Nome Completo</label>
+                                <input type="text" name="name" value="${displayName}" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100">Atualizar Perfil</button>
+                        </form>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Nova Proposta</h3>
+                        </div>
+                        <form id="proposalForm" class="auth-form">
+                            <div class="auth-field">
+                                <label>Lojista (Favoritados)</label>
+                                <select name="agency" class="form-select" required>
+                                    <option value="">Selecione uma loja...</option>
+                                    ${favAgencies.map(a => `<option value="${a}">${a}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="auth-field">
+                                <label>Mensagem</label>
+                                <textarea name="message" class="form-control" placeholder="Tenho interesse no veículo..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" ${favAgencies.length === 0 ? 'disabled' : ''}>
+                                ${favAgencies.length === 0 ? 'Favorite um carro primeiro' : 'Enviar Proposta'}
+                            </button>
+                        </form>
+                    </section>
+                </div>
+
+                <div class="two-column-layout">
+                    <section class="panel">
+                        <h3>Minhas Mensagens</h3>
+                        <div class="activity-list" style="margin-top:15px;">
+                            ${myProposals.length ? myProposals.map(p => `
+                                <li>
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Para: ${p.agency}</strong>
+                                        <small class="status-pill">Respondida</small>
+                                    </div>
+                                    <p class="mb-1"><em>Sua proposta: ${p.message}</em></p>
+                                    <p class="text-success"><strong>Loja:</strong> Olá! Recebemos sua proposta. O veículo está disponível para teste. Quando podemos agendar?</p>
+                                </li>
+                            `).join('') : '<p class="muted">Nenhuma proposta enviada.</p>'}
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <h3>Favoritos (${wishlist.length}/${MAX_FAVORITES})</h3>
+                        <div class="saved-vehicles" style="margin-top:15px;">
+                            ${favVehicles.map(v => `
+                                <article>
+                                    <img src="${v.image}" alt="">
+                                    <div>
+                                        <strong>${v.title}</strong>
+                                        <span>R$ ${formatMoney(v.price)}</span>
+                                    </div>
+                                </article>
+                            `).join('')}
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    `;
+
+    // Eventos do Painel
+    document.getElementById('editProfileForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+
+        const newName = e.target.name.value.trim();
+        const fileInput = document.getElementById('profilePhotoInput');
+        let imageUrl = session.image;
+
+        if (fileInput.files[0]) {
+            const res = await uploadParaCloudinary(fileInput.files[0]);
+            imageUrl = res.secure_url;
+        }
+
+        const updatedSession = { ...session, name: newName, image: imageUrl };
+        saveSession(updatedSession);
+        
+        const clients = getClients().map(c => c.email === session.email ? updatedSession : c);
+        saveClients(clients);
+        
+        alert('Perfil atualizado!');
+        syncLoginState();
+        // Pequeno delay para garantir que o DOM atualize
+        renderClientDashboard();
+    });
+
+    document.getElementById('proposalForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const proposals = getProposals();
+        proposals.push({
+            id: Date.now(),
+            clientEmail: session.email,
+            agency: fd.get('agency'),
+            message: fd.get('message'),
+            date: new Date().toLocaleDateString()
+        });
+        saveProposals(proposals);
+        alert('Proposta enviada com sucesso!');
+        e.target.reset();
+        renderClientDashboard();
+    });
+
+    document.getElementById('logoutDashboard')?.addEventListener('click', () => {
+        clearSession();
+        syncLoginState();
     });
 }
 
@@ -836,7 +1331,6 @@ function router() {
         case '#particular':
         case '#lojas-credenciadas':
         case '#marketplace-0km':
-        case '#marketplace-usados':
         case '#marketplace-seminovos':
             seedIfEmpty();
             renderMarketplace();
@@ -862,9 +1356,15 @@ function router() {
             showView('admin');
             renderAdminList();
             break;
+        case '#lojista':
+            setSessionFromHref('#lojista');
+            showView('lojista');
+            renderLojistaDashboard();
+            break;
         case '#cliente':
             setSessionFromHref('#cliente');
             showView('cliente');
+            renderClientDashboard();
             break;
         case '#sobre':
             showView('sobre');
