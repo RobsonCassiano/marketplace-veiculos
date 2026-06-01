@@ -13,24 +13,6 @@ navTriggers.forEach(trigger => {
   if (submenuId) {
     trigger.setAttribute('aria-controls', `submenu-${submenuId}`);
   }
-
-  trigger.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    const activeSubmenuId = trigger.getAttribute('data-submenu');
-    const submenu = document.getElementById(`submenu-${activeSubmenuId}`);
-
-    if (!submenu) return;
-
-    const isActive = submenu.classList.contains('active');
-    closeAllMenus();
-
-    if (!isActive) {
-      submenu.classList.add('active');
-      trigger.classList.add('active');
-      trigger.setAttribute('aria-expanded', 'true');
-    }
-  });
 });
 
 function closeAllMenus() {

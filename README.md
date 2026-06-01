@@ -114,3 +114,14 @@ Nome sugerido--
 - ---
 https://robsoncassiano.github.io/marketplace-veiculos/
 
+Como entrar em cada uma:
+Para acessar uma loja específica, clique em "Anuncie" no menu principal e, no formulário de "Entrar", utilize os e-mails abaixo (selecionando a opção "Sou revendedor"):
+
+Auto Norte Multimarcas: contato@autonorte.com
+Prime Veiculos: contato@primeveiculos.com
+BH Motors: contato@bhmotors.com
+Fast Car Multimarcas: contato@fastcar.com
+Top Motors: contato@topmotors.com
+Via Norte Veiculos: contato@vianorte.com
+Auto Leste: contato@autoleste.com
+Dica: Ao entrar com qualquer um desses e-mails, o painel do lojista carregará automaticamente apenas os veículos vinculados àquela loja. Se você quiser ver todos de uma vez como dono da plataforma, utilize o link "Acesso Administrativo" no rodapé (ou a URL #admin).

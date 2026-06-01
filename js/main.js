@@ -15,14 +15,15 @@ const WKEY = 'buscarauto_wishlist_v1';
 const SESSION_KEY = 'buscarauto_session_v1';
 const CLIENTS_KEY = 'buscarauto_clients_v1';
 const PROPOSALS_KEY = 'buscarauto_proposals_v1';
+const STORES_KEY = 'buscarauto_stores_v1';
 const MAX_CLIENTS = 5;
 const MAX_FAVORITES = 3;
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 8;
 const DEFAULT_GALLERY = [
-    'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1550355291-bbee04a92027?q=80&w=1200&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1549399542-7e3f8b79f84f?q=80&w=1200&auto=format&fit=crop'
+    'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/galeria-1.jpg',
+    'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/galeria-2.jpg',
+    'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/galeria-3.jpg',
+    'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/galeria-4.jpg'
 ];
 
 let currentPage = 1;
@@ -122,6 +123,32 @@ function saveVehicles(arr) {
     localStorage.setItem(VKEY, JSON.stringify(arr));
 }
 
+function getStores() {
+    let stores = JSON.parse(localStorage.getItem(STORES_KEY) || '[]');
+    const storeSeeds = [
+        { id: 'store-1', storeName: 'Auto Norte Multimarcas', email: 'contato@autonorte.com', city: 'Sao Paulo', state: 'SP' },
+        { id: 'store-2', storeName: 'Prime Veiculos', email: 'contato@primeveiculos.com', city: 'Curitiba', state: 'PR' },
+        { id: 'store-3', storeName: 'BH Motors', email: 'contato@bhmotors.com', city: 'Belo Horizonte', state: 'MG' },
+        { id: 'store-4', storeName: 'Fast Car Multimarcas', email: 'contato@fastcar.com', city: 'Campinas', state: 'SP' },
+        { id: 'store-5', storeName: 'Top Motors', email: 'contato@topmotors.com', city: 'Porto Alegre', state: 'RS' },
+        { id: 'store-6', storeName: 'Via Norte Veiculos', email: 'contato@vianorte.com', city: 'Manaus', state: 'AM' },
+        { id: 'store-7', storeName: 'Auto Leste', email: 'contato@autoleste.com', city: 'Sao Paulo', state: 'SP' }
+    ];
+
+    let updated = false;
+    storeSeeds.forEach(seed => {
+        if (!stores.find(s => s.email.toLowerCase() === seed.email.toLowerCase())) {
+            stores.push(seed);
+            updated = true;
+        }
+    });
+
+    if (updated) {
+        localStorage.setItem(STORES_KEY, JSON.stringify(stores));
+    }
+    return stores;
+}
+
 function numericValue(value) {
     return Number(String(value || '').replace(/\D/g, '') || 0);
 }
@@ -137,15 +164,29 @@ function formatKm(value) {
 function seedIfEmpty() {
     const v = getVehicles();
 
+    // Migração Completa: Garante que TODAS as sementes tenham o ownerEmail correto
+    const migrationMap = {
+        'seed-camaro': 'contato@autonorte.com',
+        'seed-mercedes': 'contato@primeveiculos.com',
+        'seed-corolla': 'contato@autonorte.com',
+        'seed-civic': 'contato@bhmotors.com',
+        'seed-toro': 'contato@fastcar.com',
+        'seed-compass': 'contato@topmotors.com',
+        'seed-gol': 'contato@vianorte.com',
+        'seed-onix': 'contato@autoleste.com'
+    };
+    const migrated = v.map(veh => migrationMap[veh.id] ? { ...veh, ownerEmail: migrationMap[veh.id] } : veh);
+    if (JSON.stringify(v) !== JSON.stringify(migrated)) saveVehicles(migrated);
+
     const seed = [
-        { id: 'seed-camaro', title: 'Camaro ZL1', brand: 'Chevrolet', year: 2024, km: '0', fuel: 'Gasolina', transmission: 'Automatico', price: '420000', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop', description: 'Camaro topo de linha com pacote esportivo, interior premium e pronta entrega.', color: 'Amarelo', location: 'Sao Paulo - SP', agency: 'Auto Norte Multimarcas' },
-        { id: 'seed-mercedes', title: 'Mercedes-Benz C300', brand: 'Mercedes-Benz', year: 2023, km: '12000', fuel: 'Flex', transmission: 'Automatico', price: '189900', image: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1200&auto=format&fit=crop', description: 'Sedan elegante, confortavel e com pacote completo de seguranca.', color: 'Prata', location: 'Curitiba - PR', agency: 'Prime Veiculos' },
-        { id: 'seed-corolla', title: 'Toyota Corolla XEi 2.0', brand: 'Toyota', year: 2020, km: '48000', fuel: 'Flex', transmission: 'Automatico', price: '96900', image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop', description: 'Unico dono, revisoes em dia, IPVA pago e pneus novos. Veiculo muito conservado para uso familiar.', color: 'Branco', location: 'Sao Paulo - SP', agency: 'Auto Norte Multimarcas' },
-        { id: 'seed-civic', title: 'Honda Civic EXL 2.0', brand: 'Honda', year: 2019, km: '62000', fuel: 'Flex', transmission: 'Automatico', price: '104900', image: 'https://images.unsplash.com/photo-1549925862-990fe6564d16?q=80&w=1200&auto=format&fit=crop', description: 'Sedan completo, bancos em couro, central multimidia e excelente historico de manutencao.', color: 'Prata', location: 'Belo Horizonte - MG', agency: 'BH Motors' },
-        { id: 'seed-toro', title: 'Fiat Toro Volcano 2.0 4x4', brand: 'Fiat', year: 2021, km: '35000', fuel: 'Diesel', transmission: 'Automatico', price: '119900', image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop', description: 'Picape pratica, potente e pronta para estrada ou trabalho.', color: 'Preto', location: 'Campinas - SP', agency: 'Fast Car Multimarcas' },
-        { id: 'seed-compass', title: 'Jeep Compass Limited 2.0', brand: 'Jeep', year: 2021, km: '28000', fuel: 'Flex', transmission: 'Automatico', price: '129900', image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=1200&auto=format&fit=crop', description: 'SUV versatil com pacote Limited, baixa quilometragem e revisoes na concessionaria.', color: 'Cinza', location: 'Porto Alegre - RS', agency: 'Top Motors' },
-        { id: 'seed-gol', title: 'Volkswagen Gol 1.6', brand: 'Volkswagen', year: 2020, km: '45000', fuel: 'Gasolina', transmission: 'Manual', price: '69900', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop', description: 'Hatch acessivel, economico e com documentacao em dia.', color: 'Vermelho', location: 'Manaus - AM', agency: 'Via Norte Veiculos' },
-        { id: 'seed-onix', title: 'Chevrolet Onix Plus LT 1.0', brand: 'Chevrolet', year: 2020, km: '15000', fuel: 'Gasolina', transmission: 'Automatico', price: '79900', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1200&auto=format&fit=crop', description: 'Compacto moderno, baixo consumo e otimo custo-beneficio.', color: 'Branco', location: 'Sao Paulo - SP', agency: 'Auto Leste' }
+        { id: 'seed-camaro', ownerEmail: 'contato@autonorte.com', title: 'Camaro ZL1', brand: 'Chevrolet', year: 2024, km: '0', fuel: 'Gasolina', transmission: 'Automatico', price: '420000', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/camaro.jpg', description: 'Camaro topo de linha com pacote esportivo, interior premium e pronta entrega.', color: 'Amarelo', location: 'Sao Paulo - SP', agency: 'Auto Norte Multimarcas' },
+        { id: 'seed-mercedes', ownerEmail: 'contato@primeveiculos.com', title: 'Mercedes-Benz C300', brand: 'Mercedes-Benz', year: 2023, km: '12000', fuel: 'Flex', transmission: 'Automatico', price: '189900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/mercedes.jpg', description: 'Sedan elegante, confortavel e com pacote completo de seguranca.', color: 'Prata', location: 'Curitiba - PR', agency: 'Prime Veiculos' },
+        { id: 'seed-corolla', ownerEmail: 'contato@autonorte.com', title: 'Toyota Corolla XEi 2.0', brand: 'Toyota', year: 2020, km: '48000', fuel: 'Flex', transmission: 'Automatico', price: '96900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/corolla.jpg', description: 'Unico dono, revisoes em dia, IPVA pago e pneus novos. Veiculo muito conservado para uso familiar.', color: 'Branco', location: 'Sao Paulo - SP', agency: 'Auto Norte Multimarcas' },
+        { id: 'seed-civic', ownerEmail: 'contato@bhmotors.com', title: 'Honda Civic EXL 2.0', brand: 'Honda', year: 2019, km: '62000', fuel: 'Flex', transmission: 'Automatico', price: '104900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/civic.jpg', description: 'Sedan completo, bancos em couro, central multimidia e excelente historico de manutencao.', color: 'Prata', location: 'Belo Horizonte - MG', agency: 'BH Motors' },
+        { id: 'seed-toro', ownerEmail: 'contato@fastcar.com', title: 'Fiat Toro Volcano 2.0 4x4', brand: 'Fiat', year: 2021, km: '35000', fuel: 'Diesel', transmission: 'Automatico', price: '119900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/toro.jpg', description: 'Picape pratica, potente e pronta para estrada ou trabalho.', color: 'Preto', location: 'Campinas - SP', agency: 'Fast Car Multimarcas' },
+        { id: 'seed-compass', ownerEmail: 'contato@topmotors.com', title: 'Jeep Compass Limited 2.0', brand: 'Jeep', year: 2021, km: '28000', fuel: 'Flex', transmission: 'Automatico', price: '129900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/compass.jpg', description: 'SUV versatil com pacote Limited, baixa quilometragem e revisoes na concessionaria.', color: 'Cinza', location: 'Porto Alegre - RS', agency: 'Top Motors' },
+        { id: 'seed-gol', ownerEmail: 'contato@vianorte.com', title: 'Volkswagen Gol 1.6', brand: 'Volkswagen', year: 2020, km: '45000', fuel: 'Gasolina', transmission: 'Manual', price: '69900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/gol.jpg', description: 'Hatch acessivel, economico e com documentacao em dia.', color: 'Vermelho', location: 'Manaus - AM', agency: 'Via Norte Veiculos' },
+        { id: 'seed-onix', ownerEmail: 'contato@autoleste.com', title: 'Chevrolet Onix Plus LT 1.0', brand: 'Chevrolet', year: 2020, km: '15000', fuel: 'Gasolina', transmission: 'Automatico', price: '79900', image: 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/onix.jpg', description: 'Compacto moderno, baixo consumo e otimo custo-beneficio.', color: 'Branco', location: 'Sao Paulo - SP', agency: 'Auto Leste' }
     ];
     if (v.some(vehicle => vehicle.id === 'seed-corolla')) return;
     saveVehicles(v.length ? [...seed, ...v] : seed);
@@ -235,8 +276,8 @@ function setSessionFromHref(href) {
     // Só cria uma sessão genérica se não houver uma sessão ativa com dados reais
     if (current && current.name) return;
 
-    if (href === '#cliente') saveSession({ role: 'client', label: 'Cliente', name: 'Usuário Cliente', email: 'cliente@exemplo.com' });
-    if (href === '#lojista') saveSession({ role: 'seller', label: 'Lojista', name: 'Auto Norte', email: 'contato@autonorte.com' });
+    if (href === '#cliente') saveSession({ role: 'client', label: 'Cliente', name: 'Marina Rocha', email: 'cliente@exemplo.com' });
+    if (href === '#lojista') saveSession({ role: 'seller', label: 'Lojista', name: 'Auto Norte Multimarcas', email: 'contato@autonorte.com' });
     if (href === '#cadastro-veiculo') saveSession({ role: 'seller', label: 'Lojista', name: 'Lojista', email: 'loja@exemplo.com' });
     if (href === '#admin') saveSession({ role: 'admin', label: 'Admin', name: 'Administrador' });
     syncLoginState();
@@ -434,7 +475,7 @@ function renderMarketplace() {
 
         card.innerHTML = `
             <div style="position: relative;">
-                <img src="${v.image || 'https://via.placeholder.com/250x180'}" alt="${v.title}" class="marketplace-card-image">
+                <img src="${v.image || 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/placeholder-thumb.jpg'}" alt="${v.title}" class="marketplace-card-image">
                 <button class="wishlist-btn" data-id="${v.id}" aria-label="Adicionar ${v.title} aos favoritos">Fav</button>
             </div>
             <div class="marketplace-card-content">
@@ -488,9 +529,9 @@ function renderVehicleDetail(id) {
         </div>
         <div class="vehicle-detail-page">
             <div class="vehicle-gallery">
-                <img src="${v.image || 'https://via.placeholder.com/1200x700'}" alt="${v.title}">
+                <img src="${v.image || 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/placeholder-hero.jpg'}" alt="${v.title}">
                 <div class="vehicle-thumbs"><span></span><span></span><span></span><span></span></div>
-                <img id="vehicleMainImage" src="${currentDetailGallery[0] || v.image || 'https://via.placeholder.com/1200x700'}" alt="${v.title}">
+                <img id="vehicleMainImage" src="${currentDetailGallery[0] || v.image || 'https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/placeholder-hero.jpg'}" alt="${v.title}">
                 <div class="vehicle-thumbs" id="vehicleThumbs">
                     ${currentDetailGallery.map((image, index) => `<button type="button" class="vehicle-thumb-btn${index === 0 ? ' active' : ''}" data-image="${image}" aria-label="Ver imagem ${index + 1}"><img src="${image}" alt="Imagem ${index + 1} de ${v.title}"></button>`).join('')}
                 </div>
@@ -552,16 +593,75 @@ function renderAgencyApprovals() {
     `).join('');
 }
 
+function renderAdminStores() {
+    const container = document.getElementById('admin-stores-list');
+    if (!container) return;
+
+    const stores = getStores();
+    const vehicles = getVehicles();
+
+    container.innerHTML = stores.map(s => {
+        const storeVehicles = vehicles.filter(v => v.agency === s.storeName);
+        return `
+            <div class="admin-row-card">
+                <div>
+                    <strong>${s.storeName}</strong>
+                    <p class="mb-0 text-muted">${s.city} / ${s.state} — ${storeVehicles.length} anúncios ativos</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-sm btn-outline-primary" onclick="location.hash='#cadastro-veiculo'; setTimeout(() => { document.querySelector('[name=\\'agency\\']').value = '${s.storeName}'; }, 100)">+ Novo Anúncio</button>
+                    <button class="btn btn-sm btn-outline-dark">Gerenciar Loja</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderAdminClients() {
+    const container = document.getElementById('admin-clients-list');
+    if (!container) return;
+
+    const clients = getClients(); // Puxa os clientes anunciantes particulares
+    const vehicles = getVehicles();
+
+    if (clients.length === 0) {
+        container.innerHTML = '<p class="text-muted">Nenhum anunciante particular cadastrado.</p>';
+        return;
+    }
+
+    container.innerHTML = clients.map(c => {
+        const clientVehicles = vehicles.filter(v => v.agency === c.name || v.ownerEmail === c.email);
+        return `
+            <div class="admin-row-card">
+                <div>
+                    <strong>${c.name}</strong>
+                    <p class="mb-0 text-muted">${c.email} — ${clientVehicles.length} anúncios</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-sm btn-outline-danger">Bloquear</button>
+                    <button class="btn btn-sm btn-outline-dark">Ver Histórico</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
 function renderAdminList() {
     const container = document.getElementById('admin-list');
     if (!container) return;
 
     const vehicles = getVehicles();
     const vehicleCount = document.getElementById('adminVehicleCount');
+    const storesCount = document.getElementById('adminStoresCount');
+
     if (vehicleCount) {
         vehicleCount.textContent = vehicles.length.toLocaleString('pt-BR');
     }
+    if (storesCount) storesCount.textContent = getStores().length;
+
     renderAgencyApprovals();
+    renderAdminStores();
+    renderAdminClients();
 
     container.innerHTML = vehicles.map(v => `
         <div class="admin-row-card">
@@ -584,8 +684,9 @@ function renderLojistaDashboard() {
     if (!container || !session) return;
 
     const allVehicles = getVehicles();
-    const myVehicles = allVehicles.filter(v => v.agency === session.name || v.agency === 'Auto Norte Multimarcas');
-    const myProposals = getProposals().filter(p => p.agency === session.name || p.agency === 'Auto Norte Multimarcas');
+    // Filtragem agora é por e-mail para garantir isolamento
+    const myVehicles = allVehicles.filter(v => String(v.ownerEmail).toLowerCase() === String(session.email).toLowerCase());
+    const myProposals = getProposals().filter(p => p.recipientEmail === session.email);
     const activeCount = myVehicles.length;
     const planLimit = 15;
 
@@ -734,17 +835,20 @@ function renderLojistaDashboard() {
 
                 <!-- Painéis Laterais (Lado Direito) -->
                 <div class="col-lg-3">
-                    <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:12px;">
-                        <h6 class="fw-bold mb-3">Uso do Plano</h6>
-                        <div class="d-flex justify-content-between mb-2">
-                            <small class="fw-bold">${activeCount} / ${planLimit} anúncios</small>
-                        </div>
-                        <div class="progress mb-3" style="height: 10px; border-radius:5px;">
-                            <div class="progress-bar bg-dark" style="width: ${(activeCount/planLimit)*100}%"></div>
-                        </div>
-                        <small class="text-muted d-block mb-3">Você pode cadastrar mais ${planLimit - activeCount} veículos.</small>
-                        <button class="btn btn-outline-dark w-100 btn-sm fw-bold py-2">Ver detalhes do plano</button>
-                    </div>
+                    <section class="card border-0 shadow-sm p-4 mb-4" style="border-radius:12px;">
+                        <h6 class="fw-bold mb-3">👤 Perfil da Agência</h6>
+                        <form id="editLojistaProfileForm">
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Logo da Loja</label>
+                                <input type="file" id="lojistaLogoInput" class="form-control form-control-sm" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Nome de Exibição</label>
+                                <input type="text" name="name" value="${session.name}" class="form-control form-control-sm" required>
+                            </div>
+                            <button type="submit" class="btn btn-dark btn-sm w-100 fw-bold">Atualizar Dados</button>
+                        </form>
+                    </section>
 
                     <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:12px;">
                         <h6 class="fw-bold mb-3">Atalhos Rápidos</h6>
@@ -768,6 +872,30 @@ function renderLojistaDashboard() {
         </div>
     `;
 
+    document.getElementById('editLojistaProfileForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+        const newName = e.target.name.value.trim();
+        const fileInput = document.getElementById('lojistaLogoInput');
+        let imageUrl = session.image;
+        if (fileInput.files[0]) {
+            const res = await uploadParaCloudinary(fileInput.files[0]);
+            imageUrl = res.secure_url;
+        }
+        const updatedSession = { ...session, name: newName, image: imageUrl };
+        saveSession(updatedSession);
+        
+        // Atualiza a loja no banco de lojas também
+        const stores = getStores().map(s => s.email === session.email ? { ...s, storeName: newName, image: imageUrl } : s);
+        localStorage.setItem(STORES_KEY, JSON.stringify(stores));
+        
+        alert('Perfil da agência atualizado!');
+        syncLoginState();
+        renderLojistaDashboard();
+    });
+
     document.getElementById('logoutLojistaNav')?.addEventListener('click', (e) => {
         e.preventDefault();
         clearSession();
@@ -779,18 +907,36 @@ function renderLojistaDashboard() {
 function initForms() {
     const anuncieForm = document.getElementById('anuncieForm');
     if (anuncieForm) {
+        // Ao entrar na view de cadastro, populamos o select de agências se for admin
+        window.addEventListener('hashchange', () => {
+            if (location.hash === '#cadastro-veiculo') {
+                const session = getSession();
+                const agencySelect = document.getElementById('agencySelect');
+                if (agencySelect && session?.role === 'admin') {
+                    const stores = getStores();
+                    agencySelect.innerHTML = '<option value="">Selecione a loja</option>' + 
+                        stores.map(s => `<option value="${s.storeName}">${s.storeName}</option>`).join('');
+                }
+            }
+        });
+
         anuncieForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const fd = new FormData(anuncieForm);
             const email = String(fd.get('email') || '').trim();
             const role = String(fd.get('role') || 'client');
             const sessionRole = role === 'seller' ? 'seller' : 'client';
+            
+            const stores = getStores();
+            const matchedStore = stores.find(s => String(s.email).toLowerCase() === email.toLowerCase());
+            const displayName = matchedStore ? matchedStore.storeName : email.split('@')[0];
+
             saveSession({ 
                 role: sessionRole, 
                 label: sessionRole === 'seller' ? 'Lojista' : 'Cliente', 
                 email: email,
-                name: email.split('@')[0], // Nome provisório baseado no e-mail
-                image: null 
+                name: displayName,
+                image: matchedStore?.image || null 
             });
             syncLoginState();
             // redirect according to role
@@ -880,9 +1026,12 @@ function initForms() {
             const fd = new FormData(form);
             const obj = Object.fromEntries(fd.entries());
             const editId = form.dataset.editId;
-            
+            const session = getSession();
+
             obj.features = fd.getAll('features');
-            obj.agency = 'Auto Norte Multimarcas';
+            // Se for admin, usa o que foi selecionado. Se for lojista, usa o nome da sessão.
+            obj.agency = session.role === 'admin' ? fd.get('agency') : (session.name || 'Auto Norte Multimarcas');
+            obj.ownerEmail = session.email;
             obj.location = 'Sao Paulo - SP';
 
             const slots = document.querySelectorAll('.photo-strip > div:not(.upload-tile)');
@@ -995,6 +1144,17 @@ function initForms() {
         renderMarketplace();
     });
 
+    const extraBrands = document.getElementById('extraBrandsCollapse');
+    const toggleBtn = document.getElementById('toggleBrandsBtn');
+    if (extraBrands && toggleBtn) {
+        extraBrands.addEventListener('show.bs.collapse', () => {
+            toggleBtn.textContent = '- Ver menos';
+        });
+        extraBrands.addEventListener('hide.bs.collapse', () => {
+            toggleBtn.textContent = '+ Ver todas';
+        });
+    }
+
     document.getElementById('loginDropdown')?.addEventListener('click', (e) => {
         const item = e.target.closest('a');
         if (!item) return;
@@ -1045,10 +1205,13 @@ function initForms() {
             const agency = contactBtn.dataset.agency;
             const vehicleTitle = document.getElementById('veiculo-title')?.textContent || 'Veículo';
             const proposals = getProposals();
+            const vehicle = getVehicles().find(v => v.title === vehicleTitle);
+
             proposals.push({
                 id: Date.now(),
                 clientEmail: session.email,
-                agency: agency,
+                recipientEmail: vehicle?.ownerEmail || 'contato@autonorte.com', // Definindo destino
+                agency: agency, // Mantido para compatibilidade visual
                 message: `Olá, tenho interesse no veículo ${vehicleTitle}. Por favor, entre em contato.`,
                 date: new Date().toLocaleDateString()
             });
@@ -1129,9 +1292,10 @@ function renderClientDashboard() {
 
     const wishlist = getWishlist();
     const allVehicles = getVehicles();
+    const myVehicles = allVehicles.filter(v => v.ownerEmail === session.email);
     const favVehicles = allVehicles.filter(v => wishlist.includes(String(v.id)));
     const favAgencies = [...new Set(favVehicles.map(v => v.agency || 'Auto Norte Multimarcas'))];
-    const myProposals = getProposals().filter(p => p.clientEmail === session.email);
+    const myProposals = getProposals().filter(p => p.clientEmail === session.email || p.recipientEmail === session.email);
     const displayName = session.name || 'Usuário';
 
     container.innerHTML = `
@@ -1146,6 +1310,7 @@ function renderClientDashboard() {
                 </div>
                 <nav>
                     <a href="#cliente" class="active">Meu Painel</a>
+                    <a href="#cadastro-veiculo">Anunciar Veículo</a>
                     <a href="#marketplace">Buscar Veículos</a>
                     <a href="#inicio" id="logoutDashboard">Sair</a>
                 </nav>
@@ -1153,8 +1318,11 @@ function renderClientDashboard() {
 
             <main class="app-main">
                 <div class="page-heading">
-                    <h2>Olá, ${displayName.split(' ')[0]}</h2>
-                    <p>Gerencie seu perfil, favoritos e propostas.</p>
+                    <div>
+                        <h2>Olá, ${displayName.split(' ')[0]}</h2>
+                        <p>Gerencie seu perfil, favoritos e propostas.</p>
+                    </div>
+                    <a class="btn btn-dark" href="#cadastro-veiculo">+ Criar Anúncio Particular</a>
                 </div>
 
                 <div class="two-column-layout">
@@ -1216,9 +1384,30 @@ function renderClientDashboard() {
                     </section>
 
                     <section class="panel">
+                        <div class="panel-header">
+                            <h3>Meus Anúncios</h3>
+                        </div>
+                        <div class="saved-vehicles" style="margin-top:15px;">
+                            ${myVehicles.length ? myVehicles.map(v => `
+                                <article>
+                                    <img src="${v.image}" alt="">
+                                    <div>
+                                        <strong>${v.title}</strong>
+                                        <span>R$ ${formatMoney(v.price)}</span>
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-sm btn-outline-dark edit-vehicle" data-id="${v.id}">Editar</button>
+                                        <button class="btn btn-sm btn-danger delete-vehicle" data-id="${v.id}">Excluir</button>
+                                    </div>
+                                </article>
+                            `).join('') : '<p class="muted">Você ainda não anunciou veículos.</p>'}
+                        </div>
+                    </section>
+
+                    <section class="panel">
                         <h3>Favoritos (${wishlist.length}/${MAX_FAVORITES})</h3>
                         <div class="saved-vehicles" style="margin-top:15px;">
-                            ${favVehicles.map(v => `
+                            ${favVehicles.length ? favVehicles.map(v => `
                                 <article>
                                     <img src="${v.image}" alt="">
                                     <div>
@@ -1226,7 +1415,7 @@ function renderClientDashboard() {
                                         <span>R$ ${formatMoney(v.price)}</span>
                                     </div>
                                 </article>
-                            `).join('')}
+                            `).join('') : '<p class="muted">Nenhum favorito.</p>'}
                         </div>
                     </section>
                 </div>
@@ -1340,9 +1529,25 @@ function router() {
         case '#cadastro':
         case '#cadastro-veiculo':
             showView('cadastro-veiculo');
+            const session = getSession();
+            const agencySelect = document.getElementById('agencySelect');
+            const agencyLabel = agencySelect?.closest('label');
+            if (session?.role === 'seller' && agencyLabel) {
+                agencyLabel.style.display = 'none';
+                agencySelect.innerHTML = `<option value="${session.name}" selected>${session.name}</option>`;
+            } else if (agencyLabel) {
+                agencyLabel.style.display = 'block';
+            }
             break;
         case '#anuncie':
-            showView('anuncie'); // Agora redireciona para a tela de login/auth
+            const sAnuncie = getSession();
+            if (sAnuncie) {
+                // Se já estiver logado, leva para o painel correspondente
+                if (session.role === 'seller') location.hash = '#lojista';
+                else location.hash = '#cliente';
+            } else {
+                showView('anuncie');
+            }
             break;
         case '#lojas-especializadas':
         case '#cadastre-loja':
@@ -1355,6 +1560,21 @@ function router() {
             setSessionFromHref('#admin');
             showView('admin');
             renderAdminList();
+            break;
+        case '#mensagens':
+        case '#perfil':
+            const sDashboard = getSession();
+            if (sDashboard?.role === 'seller') {
+                showView('lojista');
+                renderLojistaDashboard();
+                document.getElementById(hash === '#perfil' ? 'editLojistaProfileForm' : 'lojista')?.scrollIntoView({ behavior: 'smooth' });
+            } else if (sDashboard?.role === 'client') {
+                showView('cliente');
+                renderClientDashboard();
+                document.getElementById(hash === '#perfil' ? 'editProfileForm' : 'cliente')?.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                location.hash = '#inicio';
+            }
             break;
         case '#lojista':
             setSessionFromHref('#lojista');

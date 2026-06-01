@@ -250,7 +250,37 @@
                                     <input class="form-check-input" type="checkbox" id="marcaHonda" data-filter="marca" value="Honda">
                                     <label class="form-check-label" for="marcaHonda">Honda <span class="count">(543)</span></label>
                                 </div>
-                                <a href="#" class="text-muted small">+ Ver todas</a>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marcaHyundai" data-filter="marca" value="Hyundai">
+                                    <label class="form-check-label" for="marcaHyundai">Hyundai <span class="count">(321)</span></label>
+                                </div>
+                                <div class="collapse" id="extraBrandsCollapse">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marcaRenault" data-filter="marca" value="Renault">
+                                        <label class="form-check-label" for="marcaRenault">Renault <span class="count">(298)</span></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marcaNissan" data-filter="marca" value="Nissan">
+                                        <label class="form-check-label" for="marcaNissan">Nissan <span class="count">(156)</span></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marcaBYD" data-filter="marca" value="BYD">
+                                        <label class="form-check-label" for="marcaBYD">BYD <span class="count">(89)</span></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marcaJeep" data-filter="marca" value="Jeep">
+                                        <label class="form-check-label" for="marcaJeep">Jeep <span class="count">(432)</span></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marcaFord" data-filter="marca" value="Ford">
+                                        <label class="form-check-label" for="marcaFord">Ford <span class="count">(215)</span></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="marcaMercedes" data-filter="marca" value="Mercedes-Benz">
+                                        <label class="form-check-label" for="marcaMercedes">Mercedes-Benz <span class="count">(112)</span></label>
+                                    </div>
+                                </div>
+                                <a href="#extraBrandsCollapse" data-bs-toggle="collapse" class="text-muted small d-block mt-2" role="button" aria-expanded="false" aria-controls="extraBrandsCollapse" id="toggleBrandsBtn">+ Ver todas</a>
                             </div>
                         </div>
 
@@ -372,12 +402,12 @@
                             </div>
                             <div class="saved-vehicles">
                                 <article>
-                                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&auto=format&fit=crop" alt="Toyota Corolla branco">
+                                    <img src="https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/corolla.jpg" alt="Toyota Corolla branco">
                                     <div><strong>Toyota Corolla XEi 2.0</strong><span>2020/2020 - 48.000 km</span><b>R$ 96.900</b></div>
                                     <a class="btn btn-sm btn-outline-dark" href="#veiculo-seed-corolla">Ver</a>
                                 </article>
                                 <article>
-                                    <img src="https://images.unsplash.com/photo-1549925862-990fe6564d16?q=80&w=600&auto=format&fit=crop" alt="Honda Civic prata">
+                                    <img src="https://res.cloudinary.com/seu-cloud-name/image/upload/v1/buscarauto/veiculos/civic.jpg" alt="Honda Civic prata">
                                     <div><strong>Honda Civic EXL 2.0</strong><span>2019/2019 - 62.000 km</span><b>R$ 104.900</b></div>
                                     <a class="btn btn-sm btn-outline-dark" href="#veiculo-seed-civic">Ver</a>
                                 </article>
@@ -416,11 +446,14 @@
                     <section class="panel">
                         <h3>1. Informacoes do veiculo</h3>
                         <div class="form-grid">
-                            <label>Marca *<select name="brand" class="form-select" required><option value="">Selecione a marca</option><option>Toyota</option><option>Honda</option><option>Jeep</option><option>Volkswagen</option><option>Chevrolet</option></select></label>
+                            <label>Marca *<select name="brand" class="form-select" required><option value="">Selecione a marca</option><option>Toyota</option><option>Honda</option><option>Jeep</option><option>Volkswagen</option><option>Chevrolet</option><option>Hyundai</option><option>Renault</option><option>Nissan</option><option>BYD</option><option>Ford</option><option>Mercedes-Benz</option></select></label>
                             <label>Modelo *<input name="title" class="form-control" placeholder="Ex.: Corolla XEi 2.0" required></label>
                             <label>Versao<input name="version" class="form-control" placeholder="Ex.: Flex Automatico"></label>
                             <label>Ano *<input name="year" type="number" class="form-control" min="1980" max="2026" placeholder="2024" required></label>
                             <label>Quilometragem *<input name="km" class="form-control" placeholder="Ex.: 48.000" required></label>
+                        <label>Agência Anunciante *
+                            <select name="agency" id="agencySelect" class="form-select" required><option value="">Selecione a agência</option></select>
+                        </label>
                             <label>Preco *<input name="price" class="form-control" placeholder="Ex.: 96900" required></label>
                             <label>Cor *<select name="color" class="form-select" required><option value="">Selecione a cor</option><option>Branco</option><option>Prata</option><option>Preto</option><option>Cinza</option><option>Vermelho</option></select></label>
                             <label>Cambio *<select name="transmission" class="form-select" required><option value="">Selecione o cambio</option><option>Automatico</option><option>Manual</option></select></label>
@@ -631,17 +664,31 @@
             <div class="app-shell">
                 <aside class="app-sidebar" aria-label="Menu do admin">
                     <div class="app-brand-card"><span class="avatar">SA</span><strong>Sistema Admin</strong><small>Painel do Super Admin</small></div>
-                    <a class="active" href="#admin">Visao geral</a><a href="#admin">Agencias</a><a href="#admin">Veiculos</a><a href="#admin">Leads / Mensagens</a><a href="#admin">Planos</a><a href="#admin">Relatorios</a>
+                    <a class="active" href="#admin">Visão Geral</a><a href="#admin-lojas">Gestão de Lojas</a><a href="#admin-clientes">Anunciantes Particulares</a><a href="#admin">Moderação de Veículos</a>
                 </aside>
                 <div class="app-content">
                     <div class="page-heading"><div><p class="eyebrow">Painel do Super Admin</p><h2 id="admin-title">Visao Geral</h2><p>Acompanhe os principais indicadores do marketplace.</p></div></div>
-                    <div class="metric-grid admin-metrics">
-                        <article class="metric-card"><span class="metric-icon">AG</span><p>Agencias ativas</p><strong>1.248</strong><small>+8,2% vs mes anterior</small></article>
+                    <div class="metric-grid admin-metrics mb-4">
+                        <article class="metric-card"><span class="metric-icon">AG</span><p>Agencias ativas</p><strong id="adminStoresCount">0</strong><small>Gestão de parceiros</small></article>
                         <article class="metric-card"><span class="metric-icon">PD</span><p>Agencias pendentes</p><strong>36</strong><small>+2,4% vs mes anterior</small></article>
                         <article class="metric-card"><span class="metric-icon">VE</span><p>Veiculos publicados</p><strong id="adminVehicleCount">0</strong><small>Atualizado pelo estoque</small></article>
                         <article class="metric-card"><span class="metric-icon">LD</span><p>Leads / Mensagens</p><strong>3.562</strong><small>+15,3% vs mes anterior</small></article>
                         <article class="metric-card"><span class="metric-icon">$</span><p>Receita mensal</p><strong>R$ 1.248.900</strong><small>+18,7% vs mes anterior</small></article>
                     </div>
+
+                    <section class="panel mb-4">
+                        <div class="panel-header"><h3>Gestão de Clientes Anunciantes (Particulares)</h3></div>
+                        <div id="admin-clients-list">
+                            <!-- Lista de clientes injetada via JS -->
+                        </div>
+                    </section>
+
+                    <section class="panel mb-4">
+                        <div class="panel-header"><h3>Painel de Lojas Cadastradas</h3></div>
+                        <div id="admin-stores-list">
+                            <!-- Lista de lojas injetada via JS -->
+                        </div>
+                    </section>
                     <section class="panel">
                         <div class="panel-header"><h3>Aprovacao de agencias <span class="status-pill">36 pendentes</span></h3><button class="btn btn-sm btn-outline-dark">Ver todas</button></div>
                         <div class="table-responsive"><table class="data-table"><thead><tr><th>Agencia</th><th>Cidade / Regiao</th><th>Plano</th><th>Cadastro</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="agencyApprovalRows"></tbody></table></div>
@@ -676,6 +723,7 @@
 
         <footer>
                 <p>© 2026 BuscarAuto — Todos os direitos reservados.</p>
+                <a href="#admin" class="text-muted small text-decoration-none" style="opacity: 0.5;">Acesso Administrativo</a>
         </footer>
 
         <!-- Scripts: Bootstrap CDN e scripts do projeto -->
