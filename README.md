@@ -54,7 +54,9 @@ Nome sugerido--
 - Hover effect com elevação
 
 ### 9. **Footer**
-- Créditos e informações da plataforma - in progress
+- Créditos e informações da plataforma 
+- Redes sociais
+- Links
 
 ### 10. **Responsividade**
 - Design adaptado para mobile (max-width: 900px)
@@ -81,10 +83,13 @@ Nome sugerido--
 
 ## 🚀 Próximos Passos
 
-- [ ] Linkar as funcionalidades
-- [ ] Página de veículos com fotos baixadas
-- [ ] Painel do cliente com favoritos
-- [ ] Painel do lojista com dashboard
+- [x] Linkar as funcionalidades
+- [x] Página de veículos com fotos baixadas e carregadas no Cloudinary
+- [x] Painel do cliente com favoritos
+- [x] Painel do lojista com dashboard
+- [ ] Ajustar alguns links do perfil
+- [ ] Ajustar login e registro de revendedores
+- [ ] Ajustar área do cliente PF
 
 ---
 

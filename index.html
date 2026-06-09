@@ -4,86 +4,82 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>BuscarAuto</title>
-
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <!-- Bootstrap (CDN) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Estilos do projeto -->
-    <link rel="stylesheet" href="css/marketplace.css">
+    <!-- Bootstrap local -->
+    <link rel="stylesheet" href="dist/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        .role-option {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="globalProgress" class="global-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
     <a href="#mainContent" class="skip-link">Pular para o conteúdo principal</a>
 
-    <header class="header" role="banner">
+    <header class="header navbar navbar-expand-lg navbar-dark sticky-top" role="banner">
 
-        <a href="#marketplace" class="logo-link" aria-label="Ir para a página inicial">
+        <a href="#inicio" class="logo-link" aria-label="Ir para a página inicial">
             <img src="images/slogan2.png" alt="BuscarAuto" class="logo">
         </a>
 
-        <nav class="nav-center" aria-label="Navegação principal">
-            <a href="#inicio" class="nav-link">Início</a>
-            
-            <div class="nav-item">
-                <button class="nav-link nav-trigger" data-submenu="comprar">
-                    Comprar
-                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                    </svg>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Alternar navegação">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="submenu" id="submenu-comprar" role="menu">
-                    <a href="#marketplace-0km" class="submenu-link" role="menuitem">
-                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
-                        </svg>
-                        Carros 0km
-                    </a>
-                    <a href="#marketplace-seminovos" class="submenu-link" role="menuitem">
-                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
-                        </svg>
-                        Seminovos
-                    </a>
-                    <a href="#marketplace-todos" class="submenu-link" role="menuitem">
-                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18 8h-1V6c0-1.1-.9-2-2-2h-2V2h-2v2H9c-1.1 0-2 .9-2 2v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"></path>
-                        </svg>
-                        Todos os veículos
-                    </a>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 align-items-lg-center justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#inicio">Início</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="venderDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Vender
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="venderDropdown">
+                                <li><a class="dropdown-item" href="#cadastro-veiculo">Anunciar veículo</a></li>
+                                <li><a class="dropdown-item" href="#revendas">Busque por Revendas</a></li>
+                                <li><a class="dropdown-item" href="#anuncie">Administrar Anúncio</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="comprarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Comprar
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="comprarDropdown">
+                                <li><a class="dropdown-item" href="#inicio">Carros</a></li>
+                                <li><a class="dropdown-item" href="#revendas">Busque por Revendas</a></li>
+                                <li><a class="dropdown-item" href="https://veiculos.fipe.org.br/" target="_blank" rel="noopener noreferrer">Tabela Fipe</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="servicosDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Serviços
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="servicosDropdown">
+                                <li><a class="dropdown-item" href="#simular-financiamento">Simular Financiamento</a></li>
+                                <li><a class="dropdown-item" href="#cotar-seguro" id="cotarSeguroLink">Cotação de Seguros</a></li>
+                                <li><a class="dropdown-item revendedor-platform-link" href="#login">Plataforma de Revendedores</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item nav-register">
+                            <a class="nav-link" href="#criar-conta">Cadastre-se</a>
+                        </li>
+                        <li class="nav-item nav-about">
+                            <a class="nav-link" href="#sobre">Sobre</a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-
-            <a href="#anuncie" class="nav-link">Anuncie</a>
-
-            <div class="nav-item">
-                <button class="nav-link nav-trigger" data-submenu="servicos">
-                    Serviços
-                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                    </svg>
-                </button>
-                <div class="submenu" id="submenu-servicos" role="menu">
-                    <a href="#cadastre-loja" class="submenu-link" role="menuitem">
-                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"></path>
-                        </svg>
-                        Cadastre sua Loja
-                    </a>
-                    <a href="https://veiculos.fipe.org.br/#carro"  target="_blank" rel="noopener noreferrer" class="submenu-link" role="menuitem">
-                        <svg class="submenu-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M10 10.02H5V21h5v-10.98zm6 0v10.98h5V10.02h-5zM19 0h-1v3h1V0zm-6 0h-1v3h1V0zM9 0H8v3h1V0z"></path>
-                        </svg>
-                        Tabela Fipe
-                    </a>
-                </div>
-            </div>
-
-            <a href="#sobre" class="nav-link">Sobre</a>
-        </nav>
-
+                
         <div class="nav-right">
             <div class="accessibility-controls">
                 <button type="button" id="fontIncrease" class="accessibility-btn" aria-label="Aumentar tamanho da fonte">A+</button>
@@ -92,42 +88,35 @@
                 <button type="button" id="resetAccessibility" class="accessibility-btn" aria-label="Restaurar configurações padrão de acessibilidade">Reset</button>
             </div>
 
-            <button class="login-btn" id="loginBtn" aria-haspopup="true" aria-expanded="false" aria-controls="loginDropdown">
-                <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
-                    <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
-                </svg>
-                <span id="loginBtnLabel">Entrar</span>
-
-            </button>
-
-            <div class="login-dropdown" id="loginDropdown" role="menu">
-                <a href="#cliente" class="dropdown-link" role="menuitem">
-                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
-                        <path d="M12 14C7.58 14 4 16.24 4 19v2h16v-2c0-2.76-3.58-5-8-5z" fill="currentColor"></path>
-                    </svg>
-                    Area do Cliente
-                </a>
-                <a href="#lojista" class="dropdown-link" role="menuitem">
-                    <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-4h2v18h-2z" fill="currentColor">
-                        </path>
-                    </svg>
-                    Sou Lojista
-                </a>
-                <a href="#" id="logoutSessionLink" class="dropdown-link" role="menuitem">
-                    Sair
-                </a>
-            </div>
-
-        </div>
+           <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <div class="dropdown">
+                        <button class="btn btn-outline-light btn-entrar dropdown-toggle" type="button"
+                            id="entrarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Entrar
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="entrarDropdown">
+                            <li><a class="dropdown-item" href="#cliente">Área do Cliente</a></li>
+                            <li><a class="dropdown-item" href="#lojista">Painel do Revendedor</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#inicio" id="logoutBtn">Sair da conta</a></li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
 
     </header>
     <div id="accessibilityStatus" class="sr-only" role="status" aria-live="polite"></div>
 
     <main id="mainContent" role="main" tabindex="-1">
-    <section class="hero">
+        <!-- Breadcrumbs Dinâmicos -->
+        <nav id="breadcrumb-nav" class="container mt-3 d-none" aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent p-0">
+                <li class="breadcrumb-item"><a href="#inicio">Início</a></li>
+                <li class="breadcrumb-item active" aria-current="page">...</li>
+            </ol>
+        </nav>
+
+    <section id="inicio" class="hero">
 
         <h2 class="hero-title">Encontre <span id="animated-text">SUVs</span> no BuscarAuto</h2>
         <p class="hero-subtitle">Compare ofertas de lojas de todo o Brasil e faça o melhor negócio.</p>
@@ -144,36 +133,42 @@
                 <div class="col-md-2">
                     <label for="priceRangeSelect" class="form-label">Faixa de Preço</label>
                     <select id="priceRangeSelect" class="form-select">
-                        <option>Selecione</option>
-                        <option>Até R$ 50.000</option>
-                        <option>R$ 50.000 - R$ 100.000</option>
-                        <option>R$ 100.000 - R$ 150.000</option>
-                        <option>Acima de R$ 150.000</option>
+                        <option value="">Selecione</option>
+                        <option value="0-50000">Até R$ 50.000</option>
+                        <option value="50000-100000">R$ 50.000 - R$ 100.000</option>
+                        <option value="100000-150000">R$ 100.000 - R$ 150.000</option>
+                        <option value="150000-">Acima de R$ 150.000</option>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <label for="regionSelect" class="form-label">Região</label>
                     <select id="regionSelect" class="form-select">
-                        <option>Selecione</option>
-                        <option>Sudeste</option>
-                        <option>Sul</option>
-                        <option>Nordeste</option>
-                        <option>Centro-Oeste</option>
-                        <option>Norte</option>
+                        <option value="">Selecione</option>
+                        <option value="Sudeste">Sudeste</option>
+                        <option value="Sul">Sul</option>
+                        <option value="Nordeste">Nordeste</option>
+                        <option value="Centro-Oeste">Centro-Oeste</option>
+                        <option value="Norte">Norte</option>
                     </select>
                 </div>
                 <div class="col-md-1">
                     <label for="yearFromSelect" class="form-label">De</label>
                     <select id="yearFromSelect" class="form-select">
+                        <option value="">Ano inicial</option>
                         <option>2010</option>
                         <option>2015</option>
                         <option>2020</option>
                         <option>2024</option>
+                        <option>2025</option>
+                        <option>2026</option>
                     </select>
                 </div>
                 <div class="col-md-1">
                     <label for="yearToSelect" class="form-label">Até</label>
                     <select id="yearToSelect" class="form-select">
+                        <option value="">Ano final</option>
+                        <option>2026</option>
+                        <option>2025</option>
                         <option>2024</option>
                         <option>2023</option>
                         <option>2020</option>
@@ -214,7 +209,7 @@
 
     </section>
 
-    <section class="marketplace-section">
+    <section class="marketplace-section" aria-labelledby="marketplace-results-title">
         <div class="container-fluid">
             <div class="row g-4">
                 <!-- Filtros Laterais -->
@@ -289,8 +284,8 @@
                             <h5 class="filter-title">Faixa de Preço</h5>
                             <div class="price-range">
                                 <div class="d-flex gap-2 mb-2">
-                                    <input type="number" class="form-control form-control-sm" placeholder="Min" id="priceMin" value="20000">
-                                    <input type="number" class="form-control form-control-sm" placeholder="Max" id="priceMax" value="250000">
+                                    <input type="number" class="form-control form-control-sm" placeholder="Min" id="priceMin">
+                                    <input type="number" class="form-control form-control-sm" placeholder="Max" id="priceMax">
                                 </div>
                             </div>
                         </div>
@@ -299,7 +294,9 @@
                         <div class="filter-group mb-4">
                             <h5 class="filter-title">Ano</h5>
                             <select class="form-select form-select-sm" id="filterYear" data-filter="year">
-                                <option value="">Selecione</option>
+                                <option value="">Selecione</option>                                
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
                                 <option value="2024">2024</option>
                                 <option value="2023">2023</option>
                                 <option value="2022">2022</option>
@@ -313,7 +310,7 @@
                             <h5 class="filter-title">Câmbio</h5>
                             <select class="form-select form-select-sm" id="filterTransmission" data-filter="transmission">
                                 <option value="">Selecione</option>
-                                <option value="Automático">Automático</option>
+                                <option value="Automatico">Automático</option>
                                 <option value="Manual">Manual</option>
                             </select>
                         </div>
@@ -323,8 +320,12 @@
                             <h5 class="filter-title">Cidade / Região</h5>
                             <select class="form-select form-select-sm" id="filterCity" data-filter="city">
                                 <option value="">Selecione</option>
-                                <option value="São Paulo">São Paulo</option>
-                                <option value="Rio de Janeiro">Rio de Janeiro</option>
+                                <option value="Sao Paulo">São Paulo</option>
+                                <option value="Curitiba">Curitiba</option>
+                                <option value="Belo Horizonte">Belo Horizonte</option>
+                                <option value="Campinas">Campinas</option>
+                                <option value="Porto Alegre">Porto Alegre</option>
+                                <option value="Manaus">Manaus</option>
                             </select>
                         </div>
                     </div>
@@ -348,7 +349,7 @@
                         </div>
                     </div>
 
-                    <p class="marketplace-subtitle">Carros usados, novos e seminovos.</p>
+                    <p id="marketplace-results-title" class="marketplace-subtitle">Carros usados, novos e seminovos.</p>
 
                     <!-- Grid de Veículos -->
                     <div class="vehicles-grid" id="vehiclesGrid">
@@ -364,6 +365,19 @@
         <section id="marketplace" class="view app-view" aria-labelledby="marketplace-title" hidden>
             <h2 id="marketplace-title" class="section-title">Marketplace</h2>
             <div id="marketplace-list" class="marketplace-list"></div>
+        </section>
+
+        <section id="revendas-lista" class="view app-view" aria-labelledby="revendas-title" hidden>
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Parceiros</p>
+                    <h2 id="revendas-title">Revendas Credenciadas</h2>
+                    <p>Conheça as lojas que anunciam no BuscarAuto e garanta uma negociação segura.</p>
+                </div>
+            </div>
+            <div id="resellers-grid" class="vehicles-grid">
+                <!-- Cards de revendas injetados via JS -->
+            </div>
         </section>
 
         <section id="cliente" class="view app-view" aria-labelledby="cliente-title" hidden>
@@ -480,12 +494,12 @@
                         <p class="muted">Adicione fotos reais do veiculo. Para este prototipo, use uma URL no campo de imagem.</p>
                         <div class="photo-strip">
                             <div class="upload-tile" id="uploadTile" style="cursor: pointer;">Adicionar fotos</div>
-                            <input type="file" id="vehicleImageFile" accept="image/*" style="display: none;">
+                            <input type="file" id="vehicleImageFile" accept="image/*" multiple style="display: none;">
                             <div></div><div></div><div></div><div></div><div></div>
                         </div>
                     </section>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-outline-dark">Salvar rascunho</button>
+                        <button type="button" id="saveDraftBtn" class="btn btn-outline-dark">Salvar rascunho</button>
                         <button type="submit" class="btn btn-dark">Publicar anuncio</button>
                     </div>
                 </div>
@@ -520,6 +534,9 @@
                     <div>
                         <p class="eyebrow">Anuncie / Acesso</p>
                         <h2 id="anuncie-title">Entrar</h2>
+                        <div id="login-alert" class="alert alert-warning py-2 px-3 mb-3 d-none" style="font-size: 0.9rem; border-left: 4px solid var(--color-accent); background-color: #fff9eb; color: #947100;">
+                            <span class="me-1">ℹ️</span> Você precisa estar logado para anunciar um veículo.
+                        </div>
                         <p class="auth-intro">Não tem uma conta? <a href="#criar-conta">Crie uma conta agora.</a></p>
                     </div>
                 </div>
@@ -537,7 +554,7 @@
 
                     <div class="auth-row">
                         <label class="auth-check"><input type="checkbox" name="keepMeLogged" class="form-check-input"> Mantenha-me conectado</label>
-                        <a href="#" class="auth-link">Esqueceu sua senha?</a>
+                        <a href="#recuperar-senha" class="auth-link">Esqueceu sua senha?</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary auth-submit">Entrar</button>
@@ -556,6 +573,15 @@
                         <label class="role-option"><input type="radio" name="role" value="client" checked> Sou cliente</label>
                         <label class="role-option"><input type="radio" name="role" value="seller"> Sou revendedor</label>
                     </div>
+
+                    <div class="mock-access-panel" aria-label="Acessos mock das lojas parceiras">
+                        <div class="mock-access-heading">
+                            <strong>Lojas parceiras mock</strong>
+                            <span>Use um acesso para abrir o painel isolado da loja.</span>
+                        </div>
+                        <div id="mockStoreAccessList" class="mock-store-grid"></div>
+                    </div>
+
 
                     <p class="auth-legal">Verifique a nossa <a href="#sobre">Política de Privacidade</a> e <a href="#sobre">Termos de Uso</a>.</p>
                 </form>
@@ -601,6 +627,74 @@
                     </div>
                 </section>
 
+                <section class="panel">
+                    <h3>--- Escolha seu Plano ---</h3>
+                    <div class="d-flex gap-3 flex-wrap mt-3">
+                        <label class="role-option p-3 border rounded flex-grow-1 position-relative" style="cursor: pointer;">
+                            <input type="radio" name="plan" value="Basico" required>
+                            <div class="ms-2 d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Plano Básico</strong><br>
+                                    <small class="text-muted">Até 10 anúncios ativos</small>
+                                </div>
+                                <span class="plan-check d-none text-success fw-bold fs-5">✓</span>
+                            </div>
+                            <div class="plan-details d-none mt-3 border-top pt-2 small text-muted">
+                                <ul class="ps-3 mb-0">
+                                    <li>Suporte via e-mail</li>
+                                    <li>Relatórios simplificados</li>
+                                </ul>
+                            </div>
+                        </label>
+                        <label class="role-option p-3 border rounded flex-grow-1 position-relative" style="cursor: pointer;">
+                            <input type="radio" name="plan" value="Intermediario">
+                            <div class="ms-2 d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Plano Intermediário</strong><br>
+                                    <small class="text-muted">Até 50 anúncios ativos</small>
+                                </div>
+                                <span class="plan-check d-none text-success fw-bold fs-5">✓</span>
+                            </div>
+                            <div class="plan-details d-none mt-3 border-top pt-2 small text-muted">
+                                <ul class="ps-3 mb-0">
+                                    <li>Suporte prioritário</li>
+                                    <li>Anúncios em destaque (2)</li>
+                                </ul>
+                            </div>
+                        </label>
+                        <label class="role-option p-3 border rounded flex-grow-1 position-relative" style="cursor: pointer;">
+                            <input type="radio" name="plan" value="Premium">
+                            <div class="ms-2 d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>Plano Premium</strong><br>
+                                    <small class="text-muted">Anúncios ilimitados</small>
+                                </div>
+                                <span class="plan-check d-none text-success fw-bold fs-5">✓</span>
+                            </div>
+                            <div class="plan-details d-none mt-3 border-top pt-2 small text-muted">
+                                <ul class="ps-3 mb-0">
+                                    <li>Gerente de conta exclusivo</li>
+                                    <li>Destaque máximo em buscas</li>
+                                </ul>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Resumo do Pedido -->
+                <section class="panel mt-4 d-none" id="planSummary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1">Resumo da Assinatura</h4>
+                            <p class="text-muted mb-0">Plano Selecionado: <strong id="summaryPlanName">-</strong></p>
+                        </div>
+                        <div class="text-end">
+                            <span class="d-block text-muted small">Investimento Mensal</span>
+                            <h3 class="text-primary mb-0" id="summaryPlanPrice">R$ 0,00</h3>
+                        </div>
+                    </div>
+                </section>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-dark">Cadastrar</button>
                 </div>
@@ -616,15 +710,50 @@
                     </div>
                 </div>
 
+                <div class="auth-nav d-flex gap-3 mb-4 border-bottom">
+                    <a href="#anuncie" class="text-decoration-none text-muted pb-2">Login</a>
+                    <a href="#criar-conta" class="text-decoration-none text-dark fw-bold border-bottom border-primary border-3 pb-2">Cadastrar</a>
+                </div>
+
                 <form id="cadastroContaForm" class="auth-form panel auth-register-panel">
-                    <div class="auth-field">
-                        <label for="cadastroNome">Primeiro nome</label>
-                        <input id="cadastroNome" name="firstName" type="text" class="form-control form-control-lg" required>
+                    <div class="auth-role-row mb-3">
+                        <p class="fw-bold mb-2">Sou:</p>
+                        <div class="d-flex gap-3">
+                            <label class="role-option"><input type="radio" name="role" value="client" checked> Pessoa Física</label>
+                            <label class="role-option"><input type="radio" name="role" value="seller"> Lojista</label>
+                        </div>
                     </div>
 
-                    <div class="auth-field">
-                        <label for="cadastroSobrenome">Sobrenome</label>
-                        <input id="cadastroSobrenome" name="lastName" type="text" class="form-control form-control-lg" required>
+                    <!-- Campos Pessoa Física -->
+                    <div id="pf-fields">
+                        <div class="auth-field mb-3">
+                            <label for="cadastroNome">Nome</label>
+                            <input id="cadastroNome" name="name" type="text" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="auth-field mb-3">
+                            <label for="cadastroTelefonePF">Telefone</label>
+                            <input id="cadastroTelefonePF" name="phonePF" type="text" class="form-control form-control-lg" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
+                    <!-- Campos Lojista -->
+                    <div id="pj-fields" style="display: none;">
+                        <div class="auth-field mb-3">
+                            <label for="cadastroResponsavel">Nome Responsável</label>
+                            <input id="cadastroResponsavel" name="responsibleName" type="text" class="form-control form-control-lg">
+                        </div>
+                        <div class="auth-field mb-3">
+                            <label for="cadastroLoja">Nome da Loja</label>
+                            <input id="cadastroLoja" name="storeName" type="text" class="form-control form-control-lg">
+                        </div>
+                        <div class="auth-field mb-3">
+                            <label for="cadastroCnpj">CNPJ</label>
+                            <input id="cadastroCnpj" name="cnpj" type="text" class="form-control form-control-lg" placeholder="00.000.000/0000-00">
+                        </div>
+                        <div class="auth-field mb-3">
+                            <label for="cadastroTelefonePJ">Telefone</label>
+                            <input id="cadastroTelefonePJ" name="phonePJ" type="text" class="form-control form-control-lg">
+                        </div>
                     </div>
 
                     <div class="auth-field">
@@ -648,11 +777,6 @@
                         <span class="captcha-mark" aria-hidden="true">reCAPTCHA</span>
                     </label>
 
-                    <div class="auth-role-row">
-                        <label class="role-option"><input type="radio" name="role" value="client"> Sou cliente</label>
-                        <label class="role-option"><input type="radio" name="role" value="seller" checked> Sou revendedor</label>
-                    </div>
-
                     <a href="#anuncie" class="auth-back-link">&laquo; Voltar</a>
 
                     <button type="submit" class="btn btn-primary auth-submit">Cadastre-se</button>
@@ -663,41 +787,53 @@
         <section id="admin" class="view app-view admin-dashboard" aria-labelledby="admin-title" hidden>
             <div class="app-shell">
                 <aside class="app-sidebar" aria-label="Menu do admin">
-                    <div class="app-brand-card"><span class="avatar">SA</span><strong>Sistema Admin</strong><small>Painel do Super Admin</small></div>
-                    <a class="active" href="#admin">Visão Geral</a><a href="#admin-lojas">Gestão de Lojas</a><a href="#admin-clientes">Anunciantes Particulares</a><a href="#admin">Moderação de Veículos</a>
+                    <div class="app-brand-card"><span class="avatar" style="background: var(--color-primary); color: white;">AD</span><strong>ADMIN</strong><small>Painel de Controle</small></div>
+                    <nav>
+                        <a class="active" href="#admin">📊 Dashboard</a>
+                        <a href="#admin">👥 Usuários</a>
+                        <a href="#admin">🏢 Lojistas</a>
+                        <a href="#admin">🚗 Veículos</a>
+                        <a href="#admin">📩 Mensagens</a>
+                        <a href="#admin">🚩 Denúncias</a>
+                        <a href="#admin">📁 Categorias</a>
+                        <a href="#admin">📈 Relatórios</a>
+                        <a href="#admin">⚙️ Configurações</a>
+                        <hr class="mx-3">
+                        <a href="#inicio" id="logoutAdmin">↪️ Sair</a>
+                    </nav>
                 </aside>
                 <div class="app-content">
-                    <div class="page-heading"><div><p class="eyebrow">Painel do Super Admin</p><h2 id="admin-title">Visao Geral</h2><p>Acompanhe os principais indicadores do marketplace.</p></div></div>
-                    <div class="metric-grid admin-metrics mb-4">
-                        <article class="metric-card"><span class="metric-icon">AG</span><p>Agencias ativas</p><strong id="adminStoresCount">0</strong><small>Gestão de parceiros</small></article>
-                        <article class="metric-card"><span class="metric-icon">PD</span><p>Agencias pendentes</p><strong>36</strong><small>+2,4% vs mes anterior</small></article>
-                        <article class="metric-card"><span class="metric-icon">VE</span><p>Veiculos publicados</p><strong id="adminVehicleCount">0</strong><small>Atualizado pelo estoque</small></article>
-                        <article class="metric-card"><span class="metric-icon">LD</span><p>Leads / Mensagens</p><strong>3.562</strong><small>+15,3% vs mes anterior</small></article>
-                        <article class="metric-card"><span class="metric-icon">$</span><p>Receita mensal</p><strong>R$ 1.248.900</strong><small>+18,7% vs mes anterior</small></article>
+                    <div id="admin-dashboard-dynamic">
+                        <!-- Conteúdo injetado via JS -->
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <section class="panel mb-4">
-                        <div class="panel-header"><h3>Gestão de Clientes Anunciantes (Particulares)</h3></div>
-                        <div id="admin-clients-list">
-                            <!-- Lista de clientes injetada via JS -->
-                        </div>
-                    </section>
-
-                    <section class="panel mb-4">
-                        <div class="panel-header"><h3>Painel de Lojas Cadastradas</h3></div>
-                        <div id="admin-stores-list">
-                            <!-- Lista de lojas injetada via JS -->
-                        </div>
-                    </section>
-                    <section class="panel">
-                        <div class="panel-header"><h3>Aprovacao de agencias <span class="status-pill">36 pendentes</span></h3><button class="btn btn-sm btn-outline-dark">Ver todas</button></div>
-                        <div class="table-responsive"><table class="data-table"><thead><tr><th>Agencia</th><th>Cidade / Regiao</th><th>Plano</th><th>Cadastro</th><th>Status</th><th>Acoes</th></tr></thead><tbody id="agencyApprovalRows"></tbody></table></div>
-                    </section>
-                    <div class="two-column-layout">
-                        <section class="panel"><div class="panel-header"><h3>Crescimento</h3><span class="status-pill">Ultimos 6 meses</span></div><div class="mini-chart" aria-label="Grafico decorativo de crescimento"><span style="height:38%"></span><span style="height:48%"></span><span style="height:56%"></span><span style="height:70%"></span><span style="height:78%"></span><span style="height:86%"></span></div></section>
-                        <section class="panel"><div class="panel-header"><h3>Atividades recentes</h3><button class="btn btn-sm btn-outline-dark">Ver todas</button></div><ul class="activity-list"><li><span>Ha 10 min</span> Nova agencia cadastrada: Auto Sul Motors.</li><li><span>Ha 35 min</span> Prime Veiculos atualizou seu plano.</li><li><span>Ha 1 h</span> Novo veiculo publicado: Honda Civic EXL.</li><li><span>Ha 2 h</span> Pagamento aprovado: Plano Premium.</li></ul></section>
+        <section id="recuperar-senha" class="view app-view auth-view" aria-labelledby="recuperar-senha-title" hidden>
+            <div class="auth-shell">
+                <div class="page-heading auth-heading">
+                    <div>
+                        <p class="eyebrow">Acesso / Segurança</p>
+                        <h2 id="recuperar-senha-title">Recuperar Senha</h2>
+                        <p class="auth-intro">Informe seu e-mail para receber as instruções de recuperação.</p>
                     </div>
-                    <section class="panel"><div class="panel-header"><h3>Veiculos cadastrados</h3><a class="btn btn-sm btn-dark" href="#cadastro-veiculo">Novo veiculo</a></div><div id="admin-list"></div></section>
+                </div>
+
+                <form id="recuperarSenhaForm" class="auth-form panel">
+                    <div class="auth-field">
+                        <label for="recuperarEmail">E-mail cadastrado</label>
+                        <input id="recuperarEmail" name="email" type="email" class="form-control form-control-lg" required placeholder="seu@email.com">
+                    </div>
+                    <button type="submit" class="btn btn-primary auth-submit w-100">Enviar Instruções</button>
+                    <a href="#anuncie" class="auth-back-link mt-3">&laquo; Voltar para o Login</a>
+                </form>
+
+                <div id="recuperarSucesso" class="alert alert-success mt-4 d-none" role="alert">
+                    <h4 class="alert-heading">E-mail enviado!</h4>
+                    <p>Se o endereço informado estiver cadastrado, você receberá um link para redefinir sua senha em instantes.</p>
+                    <hr>
+                    <p class="mb-0">Não esqueça de verificar sua caixa de spam.</p>
                 </div>
             </div>
         </section>
@@ -719,17 +855,249 @@
                 <a class="btn btn-dark" href="#marketplace">Conhecer veiculos</a>
             </section>
         </section>
+
+        <section id="termos" class="view app-view" aria-labelledby="termos-title" hidden>
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Institucional</p>
+                    <h2 id="termos-title">Termos de Uso e Privacidade</h2>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>1. Aceitação dos Termos</h3>
+                <p>Ao acessar o BuscarAuto, você concorda em cumprir estes termos de serviço e todas as leis aplicáveis.</p>
+                <h3 class="mt-4">2. Uso do Site</h3>
+                <p>A plataforma funciona como um marketplace. Não garantimos a venda imediata nem nos responsabilizamos por negociações externas entre lojistas e clientes.</p>
+                <h3 class="mt-4">3. Privacidade de Dados</h3>
+                <p>Seus dados são processados localmente (IndexedDB/LocalStorage) para fins de demonstração neste protótipo.</p>
+            </div>
+        </section>
+
+        <section id="ajuda" class="view app-view" aria-labelledby="ajuda-title" hidden>
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Suporte</p>
+                    <h2 id="ajuda-title">Ajuda e Contato</h2>
+                    <p>Como podemos ajudar você hoje?</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="panel h-100">
+                        <h3>Perguntas Frequentes</h3>
+                        <details class="mb-3 mt-3"><summary class="fw-bold cursor-pointer">Como anuncio meu carro?</summary><p class="mt-2 small">Clique em "Anunciar Veículo" no menu Vender e siga o passo a passo.</p></details>
+                        <details class="mb-3"><summary class="fw-bold cursor-pointer">É seguro comprar no BuscarAuto?</summary><p class="mt-2 small">Sim, verificamos todas as revendas credenciadas em nossa plataforma.</p></details>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form class="panel h-100">
+                        <h3>Envie uma mensagem</h3>
+                        <input type="text" class="form-control mb-2" placeholder="Seu nome">
+                        <textarea class="form-control mb-3" rows="4" placeholder="Em que podemos ajudar?"></textarea>
+                        <button type="button" class="btn btn-dark w-100" onclick="alert('Mensagem enviada! Retornaremos em breve.')">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
 
-        <footer>
-                <p>© 2026 BuscarAuto — Todos os direitos reservados.</p>
-                <a href="#admin" class="text-muted small text-decoration-none" style="opacity: 0.5;">Acesso Administrativo</a>
-        </footer>
+    <!-- Modal de Confirmação de Banimento -->
+    <div class="modal fade" id="banUserModal" tabindex="-1" aria-labelledby="banUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="banUserModalLabel">⚠️ Confirmar Banimento Permanente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Você está prestes a banir <strong><span id="banUserNameDisplay"></span></strong> (<span id="banUserEmailDisplay"></span>).</p>
+                    <p class="text-danger fw-bold">Esta ação é irreversível e removerá todos os anúncios associados!</p>
+                    <div class="mb-3">
+                        <label for="banReasonInput" class="form-label fw-bold">Motivo do Banimento:</label>
+                        <textarea class="form-control" id="banReasonInput" rows="3" placeholder="Ex: Fraude recorrente, violação dos termos..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirmBanBtn" class="btn btn-danger px-4">Confirmar Banimento</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Scripts: Bootstrap CDN e scripts do projeto -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/marketplace.js?v=2"></script>
-        <script type="module" src="js/main.js?v=2"></script>
+    <!-- Modal de Financiamento -->
+    <div class="modal fade" id="financeModal" tabindex="-1" aria-labelledby="financeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="financeModalLabel">💰 Simular Financiamento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="financeForm">
+                        <div class="mb-3">
+                            <label for="valorVeiculo" class="form-label fw-bold">Valor do Veículo (R$)</label>
+                            <input type="number" class="form-control" id="valorVeiculo" placeholder="Ex: 80000" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="valorEntrada" class="form-label fw-bold">Valor da Entrada (R$)</label>
+                            <input type="number" class="form-control" id="valorEntrada" placeholder="Ex: 20000" value="0">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="taxaJuros" class="form-label fw-bold">Juros (% a.m.)</label>
+                                <input type="number" class="form-control" id="taxaJuros" step="0.01" value="1.99">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="prazoMeses" class="form-label fw-bold">Prazo (meses)</label>
+                                <select class="form-select" id="prazoMeses">
+                                    <option value="12">12x</option>
+                                    <option value="24">24x</option>
+                                    <option value="36">36x</option>
+                                    <option value="48">48x</option>
+                                    <option value="60" selected>60x</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">Calcular Financiamento</button>
+                    </form>
+
+                    <div id="financeResults" class="mt-4 d-none p-3 rounded bg-light border">
+                        <h6 class="fw-bold mb-3 border-bottom pb-2 text-primary">Resultado da Simulação:</h6>
+                        <div class="d-flex justify-content-between mb-2"><span>Valor financiado:</span> <strong id="resFinanciado"></strong></div>
+                        <div class="d-flex justify-content-between mb-2"><span>Parcelas:</span> <strong id="resParcelas" class="text-success fs-5"></strong></div>
+                        <div class="d-flex justify-content-between mb-2"><span>Total pago:</span> <strong id="resTotalPago"></strong></div>
+                        <div class="d-flex justify-content-between mb-3"><span>Total de juros:</span> <strong id="resTotalJuros" class="text-danger"></strong></div>
+                        <button type="button" id="sendFinanceEmailBtn" class="btn btn-outline-success w-100 fw-bold">📧 Enviar Simulação por E-mail</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cotação de Seguro -->
+    <div class="modal fade" id="insuranceModal" tabindex="-1" aria-labelledby="insuranceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="insuranceModalLabel">🛡️ Cotação de Seguro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSeguro">
+                        <input type="hidden" id="seguroVeiculoId">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nome" class="form-label fw-bold">Nome</label>
+                                <input type="text" class="form-control" id="nome" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="telefone" class="form-label fw-bold">Telefone</label>
+                                <input type="text" class="form-control" id="telefone" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label fw-bold">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cep" class="form-label fw-bold">CEP</label>
+                                <input type="text" class="form-control" id="cep" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nascimento" class="form-label fw-bold">Data de Nascimento</label>
+                                <input type="date" class="form-control" id="nascimento" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="condutor" class="form-label fw-bold">Principal Condutor</label>
+                                <select class="form-select" id="condutor">
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">Solicitar Cotação</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div id="notificationToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-primary text-white">
+                <strong class="me-auto" id="toastTitle">🔔 Notificação</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                Você recebeu uma nova mensagem.
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão Voltar ao Topo -->
+    <button id="backToTop" class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 d-none" style="z-index: 1050; width: 50px; height: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);" aria-label="Voltar ao topo">
+        <span aria-hidden="true" style="font-size: 20px;">↑</span>
+    </button>
+
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <img src="images/slogan2.png" alt="BuscarAuto" class="mb-3" style="max-height: 40px;">
+                    <p class="small text-muted">O maior ecossistema de compra e venda de veículos do país. Conectando pessoas e realizando sonhos com segurança e transparência.</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="https://facebook.com" target="_blank">
+        <i class="fa-brands fa-facebook-f"></i>
+    </a>
+
+    <a href="https://instagram.com" target="_blank">
+        <i class="fa-brands fa-instagram"></i>
+    </a>
+
+    <a href="https://wa.me/5511999999999" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="fw-bold mb-3">Comprar</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#marketplace-todos" class="text-muted text-decoration-none">Todos os carros</a></li>
+                        <li class="mb-2"><a href="#marketplace-0km" class="text-muted text-decoration-none">Carros 0km</a></li>
+                        <li class="mb-2"><a href="#marketplace-seminovos" class="text-muted text-decoration-none">Seminovos</a></li>
+                        <li class="mb-2"><a href="#revendas" class="text-muted text-decoration-none">Revendedores</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="fw-bold mb-3">Vender</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#cadastro-veiculo" class="text-muted text-decoration-none">Anunciar meu carro</a></li>
+                        <li class="mb-2"><a href="#anuncie" class="text-muted text-decoration-none">Gerenciar anúncio</a></li>
+                        <li class="mb-2"><a href="#cadastre-loja" class="text-muted text-decoration-none">Venda profissional</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">Institucional</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#sobre" class="text-muted text-decoration-none">Sobre a BuscarAuto</a></li>
+                        <li class="mb-2"><a href="#termos" class="text-muted text-decoration-none">Termos de Uso e Privacidade</a></li>
+                        <li class="mb-2"><a href="#ajuda" class="text-muted text-decoration-none">Ajuda e Contato</a></li>
+                        <li class="mt-4"><a href="#admin" class="text-muted small text-decoration-none" style="opacity: 0.5;">Acesso Administrativo</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="text-center small text-muted">
+                <p>© 2026 BuscarAuto — Todos os direitos reservados. Fotos meramente ilustrativas.</p>
+            </div>
+        </div>
+    </footer>
+
+        <!-- Scripts: Bootstrap local e scripts do projeto -->
+        <script src="dist/js/bootstrap.bundle.min.js"></script>
+        <script type="module" src="js/main.js"></script>
+        <!-- Removido o segundo import de main.js -->
 
    
 

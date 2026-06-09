@@ -1,5 +1,6 @@
 /* Submenus da navegacao */
 
+const mainNavbar = document.getElementById('mainNavbar');
 const loginBtn = document.getElementById('loginBtn');
 const loginDropdown = document.getElementById('loginDropdown');
 
@@ -16,33 +17,27 @@ navTriggers.forEach(trigger => {
 });
 
 function closeAllMenus() {
-  document.querySelectorAll('.submenu.active').forEach(menu => {
-    menu.classList.remove('active');
-  });
+  // Fecha Dropdowns do Bootstrap
+  const dropdowns = document.querySelectorAll('.dropdown-menu.show');
+  dropdowns.forEach(dd => dd.classList.remove('show'));
 
-  document.querySelectorAll('.nav-trigger.active').forEach(btn => {
-    btn.classList.remove('active');
-    btn.setAttribute('aria-expanded', 'false');
-  });
-
-  if (loginDropdown) {
-    loginDropdown.classList.remove('active');
-  }
-
-  if (loginBtn) {
-    loginBtn.setAttribute('aria-expanded', 'false');
+  // Fecha o menu mobile do Bootstrap
+  if (mainNavbar && mainNavbar.classList.contains('show')) {
+    const bsCollapse = bootstrap.Collapse.getInstance(mainNavbar);
+    if (bsCollapse) bsCollapse.hide();
   }
 }
 
 document.addEventListener('click', (e) => {
   // Fecha menus se o clique for fora de um item de navegação ou do botão de login
-  if (!e.target.closest('.nav-item') && !e.target.closest('.nav-right')) {
+  if (!e.target.closest('.navbar-nav') && !e.target.closest('.nav-right') && !e.target.closest('.navbar-toggler')) {
     closeAllMenus();
   }
 });
 
-// Fecha menus ao clicar em qualquer link de submenu ou dropdown (melhoria UX para SPA)
-document.querySelectorAll('.submenu-link, .dropdown-link').forEach(link => {
+// Fecha menus ao clicar em qualquer link (melhoria UX para SPA)
+document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+  if (link.classList.contains('dropdown-toggle')) return;
   link.addEventListener('click', () => {
     closeAllMenus();
   });
@@ -53,24 +48,6 @@ document.addEventListener('keydown', (e) => {
     closeAllMenus();
   }
 });
-
-/* Login dropdown */
-
-if (loginBtn && loginDropdown) {
-  loginBtn.setAttribute('aria-haspopup', 'true');
-  loginBtn.setAttribute('aria-expanded', 'false');
-
-  loginBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isActive = loginDropdown.classList.contains('active');
-    closeAllMenus();
-
-    if (!isActive) {
-      loginDropdown.classList.add('active');
-      loginBtn.setAttribute('aria-expanded', 'true');
-    }
-  });
-}
 
 /* Carousel */
 
