@@ -4,7 +4,7 @@ export class CarCard extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        // Adota o stylesheet do Bootstrap e o estilo local (opcional)
+        // Adota o stylesheet do Bootstrap
         this.shadowRoot.adoptedStyleSheets = [bootstrapSheet];
     }
 

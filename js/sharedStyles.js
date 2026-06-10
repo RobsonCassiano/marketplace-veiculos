@@ -9,13 +9,8 @@ window.__sharedStylesLoaded = true;
 // Carrega o arquivo CSS local e preenche o stylesheet
 const loadBootstrap = async () => {
     try {
-        // Determinar o caminho base correto
-        const protocol = window.location.protocol;
-        const hostname = window.location.hostname;
-        const port = window.location.port ? ':' + window.location.port : '';
-        const baseUrl = `${protocol}//${hostname}${port}/marketplace-veiculos`;
-        
-        const url = baseUrl + '/dist/css/bootstrap.min.css';
+        // Usar caminho relativo ao invés de absoluto fixo para evitar erros em diferentes domínios/subpastas
+        const url = './dist/css/bootstrap.min.css';
         const response = await fetch(url);
         
         if (!response.ok) {

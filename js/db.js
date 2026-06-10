@@ -70,7 +70,7 @@ export async function getDraftsByEmail(email) {
         const request = store.getAll();
 
         request.onsuccess = () => {
-            // Filtra manualmente por e-mail (ou você poderia criar um index no IndexedDB)
+            // Filtra manualmente por e-mail 
             const filtered = request.result.filter(d => d.ownerEmail === email);
             resolve(filtered);
         };

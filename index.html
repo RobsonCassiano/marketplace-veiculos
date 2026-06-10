@@ -35,18 +35,17 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0 align-items-lg-center justify-content-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#inicio">Início</a>
-                        </li>
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="venderDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Vender
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="venderDropdown">
-                                <li><a class="dropdown-item" href="#cadastro-veiculo">Anunciar veículo</a></li>
+                                <li><a class="dropdown-item" href="#cadastro-veiculo">Anunciar Veículo</a></li>
                                 <li><a class="dropdown-item" href="#revendas">Busque por Revendas</a></li>
-                                <li><a class="dropdown-item" href="#anuncie">Administrar Anúncio</a></li>
+                                <li><a class="dropdown-item" href="#login">Administrar Anúncio</a></li>
+                                <li class="mb-2"><a class="dropdown-item" href="#cadastre-loja">Cadastro lojista</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -55,9 +54,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                                 Comprar
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="comprarDropdown">
-                                <li><a class="dropdown-item" href="#inicio">Carros</a></li>
-                                <li><a class="dropdown-item" href="#revendas">Busque por Revendas</a></li>
-                                <li><a class="dropdown-item" href="https://veiculos.fipe.org.br/" target="_blank" rel="noopener noreferrer">Tabela Fipe</a></li>
+                                <li><a class="dropdown-item" href="#marketplace-usados">Carros usados</a></li>
+                                <li><a class="dropdown-item" href="#marketplace-seminovos">Seminovos</a></li>
+                                <li><a class="dropdown-item" href="#marketplace-colecao">De Coleção</a></li>
+                               
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -68,12 +68,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                             <ul class="dropdown-menu" aria-labelledby="servicosDropdown">
                                 <li><a class="dropdown-item" href="#simular-financiamento">Simular Financiamento</a></li>
                                 <li><a class="dropdown-item" href="#cotar-seguro" id="cotarSeguroLink">Cotação de Seguros</a></li>
-                                <li><a class="dropdown-item revendedor-platform-link" href="#login">Plataforma de Revendedores</a></li>
+                                 <li><a class="dropdown-item" href="https://veiculos.fipe.org.br/" target="_blank" rel="noopener noreferrer">Tabela Fipe</a></li>
+                                
                             </ul>
                         </li>
-                        <li class="nav-item nav-register">
-                            <a class="nav-link" href="#criar-conta">Cadastre-se</a>
-                        </li>
+                        
                         <li class="nav-item nav-about">
                             <a class="nav-link" href="#sobre">Sobre</a>
                         </li>
@@ -95,10 +94,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                             Entrar
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="entrarDropdown">
-                            <li><a class="dropdown-item" href="#cliente">Área do Cliente</a></li>
-                            <li><a class="dropdown-item" href="#lojista">Painel do Revendedor</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#inicio" id="logoutBtn">Sair da conta</a></li>
+                            <li><a class="dropdown-item" href="#login">Login</a></li>
+                            <li><a class="dropdown-item" href="#login">Sou Lojista</a></li>
+                            <li><hr class="dropdown-divider" style="display: none;"></li>
+                            <li style="display: none;"><a class="dropdown-item text-danger fw-bold" href="#inicio" id="logoutBtn">Sair</a></li>
+                           
                         </ul>
                         </div>
                     </div>
@@ -537,7 +537,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         <div id="login-alert" class="alert alert-warning py-2 px-3 mb-3 d-none" style="font-size: 0.9rem; border-left: 4px solid var(--color-accent); background-color: #fff9eb; color: #947100;">
                             <span class="me-1">ℹ️</span> Você precisa estar logado para anunciar um veículo.
                         </div>
-                        <p class="auth-intro">Não tem uma conta? <a href="#criar-conta">Crie uma conta agora.</a></p>
+                        <p class="auth-intro">Não tem uma conta? <a href="#criar-conta">Cadastre-se aqui.</a></p>
                     </div>
                 </div>
 
@@ -571,7 +571,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                     <div class="auth-role-row">
                         <label class="role-option"><input type="radio" name="role" value="client" checked> Sou cliente</label>
-                        <label class="role-option"><input type="radio" name="role" value="seller"> Sou revendedor</label>
+                        <label class="role-option"><input type="radio" name="role" value="seller"> Sou Lojista</label>
                     </div>
 
                     <div class="mock-access-panel" aria-label="Acessos mock das lojas parceiras">
@@ -716,13 +716,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                 </div>
 
                 <form id="cadastroContaForm" class="auth-form panel auth-register-panel">
-                    <div class="auth-role-row mb-3">
-                        <p class="fw-bold mb-2">Sou:</p>
-                        <div class="d-flex gap-3">
-                            <label class="role-option"><input type="radio" name="role" value="client" checked> Pessoa Física</label>
-                            <label class="role-option"><input type="radio" name="role" value="seller"> Lojista</label>
-                        </div>
-                    </div>
 
                     <!-- Campos Pessoa Física -->
                     <div id="pf-fields">
@@ -733,26 +726,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         <div class="auth-field mb-3">
                             <label for="cadastroTelefonePF">Telefone</label>
                             <input id="cadastroTelefonePF" name="phonePF" type="text" class="form-control form-control-lg" placeholder="(00) 00000-0000">
-                        </div>
-                    </div>
-
-                    <!-- Campos Lojista -->
-                    <div id="pj-fields" style="display: none;">
-                        <div class="auth-field mb-3">
-                            <label for="cadastroResponsavel">Nome Responsável</label>
-                            <input id="cadastroResponsavel" name="responsibleName" type="text" class="form-control form-control-lg">
-                        </div>
-                        <div class="auth-field mb-3">
-                            <label for="cadastroLoja">Nome da Loja</label>
-                            <input id="cadastroLoja" name="storeName" type="text" class="form-control form-control-lg">
-                        </div>
-                        <div class="auth-field mb-3">
-                            <label for="cadastroCnpj">CNPJ</label>
-                            <input id="cadastroCnpj" name="cnpj" type="text" class="form-control form-control-lg" placeholder="00.000.000/0000-00">
-                        </div>
-                        <div class="auth-field mb-3">
-                            <label for="cadastroTelefonePJ">Telefone</label>
-                            <input id="cadastroTelefonePJ" name="phonePJ" type="text" class="form-control form-control-lg">
                         </div>
                     </div>
 
@@ -770,12 +743,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         <label for="cadastroConfirmacao">Confirme a senha</label>
                         <input id="cadastroConfirmacao" name="confirmPassword" type="password" class="form-control form-control-lg" required>
                     </div>
-
-                    <label class="captcha-box">
-                        <input type="checkbox" name="captcha" class="form-check-input">
-                        <span>Não sou um robô</span>
-                        <span class="captcha-mark" aria-hidden="true">reCAPTCHA</span>
-                    </label>
 
                     <a href="#anuncie" class="auth-back-link">&laquo; Voltar</a>
 

@@ -10,14 +10,14 @@ Nome sugerido--
 
 ### 1. **Estrutura do Projeto**
 - Diretórios com separação clara entre HTML, CSS e JavaScript
-- Criação de arquivos específicos: `marketplace.css`, `marketplace.js`, `main.js` e arquivos css equivalentes. 
+- Criação de arquivos específicos: `style.css`, `animation.js`, `main.js`, `CarCard.js`, `cloudinary.js`, `db.js`, `sharedStyles.js` e pasta imagens. 
 - Estruturação do `index.html` do marketplace-página inicial - SPA.
 
 ### 2. **Header/Navegação**
 - Header sticky com fundo branco e sombra
-- Navegação centralizada com 5 links (Inicio, Vender, Comprar, Serviços, Sobre)
+- Navegação centralizada com 4 links (Vender, Comprar, Serviços, Sobre)
 - Links com efeito hover de mudança de cor suave, padronizados com o botão "Entrar"
-- Botão "Entrar" alinhado à direita com ícone de usuário SVG
+- Botão "Entrar" alinhado à direita
 - Submenus (Comprar, Vender, Serviços) com ativação por clique, garantindo consistência na interface - hover
 - Menu de serviços com link direto para consulta externa da **Tabela FIPE**
 
@@ -48,6 +48,7 @@ Nome sugerido--
 ### 7. **Resultados encontrados**
 - Ordenar o resultado por: Mais Relevantes, menor preço, maior preço e mais novos
 - Cards com imagens reais (Unsplash)
+- Cards com imagens reais (Cloudinary)
 
 ### 8. **Seção de cards**
 - Foto, nome do veiculo, valor, região, loja ou particular
@@ -76,8 +77,8 @@ Nome sugerido--
 | Arquivo | Status | Descrição |
 |---------|--------|-----------|
 | `index.html` | ✅ Atualizado | HTML limpo sem estilos inline |
-| `css` | ✅ Criado | Todos os estilos modernos |
-| `js`| ✅ Criado | Scripts (animação, dropdown) |
+| `css` | ✅ Criado | `style.css` e `bootstrap.min.css` com estilos modernos |
+| `js`| ✅ Criado | `main.js`, `animation.js`, `CarCard.js`, `cloudinary.js`, `db.js`, `sharedStyles.js` e outros scripts de interatividade |
 
 ---
 
@@ -87,9 +88,9 @@ Nome sugerido--
 - [x] Página de veículos com fotos baixadas e carregadas no Cloudinary
 - [x] Painel do cliente com favoritos
 - [x] Painel do lojista com dashboard
-- [ ] Ajustar alguns links do perfil
-- [ ] Ajustar login e registro de revendedores
-- [ ] Ajustar área do cliente PF
+- [x] Ajustar alguns links do perfil
+- [x] Ajustar login e registro de revendedores
+- [x] Ajustar área do cliente PF
 
 ---
 

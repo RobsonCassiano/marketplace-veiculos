@@ -19,12 +19,12 @@ export async function uploadParaCloudinary(file) {
             });
 
             if (!response.ok) {
-                // Se for um erro de cliente (4xx), lançamos um erro específico para não tentar novamente
+                // Se for um erro de cliente (4xx)
                 if (response.status >= 400 && response.status < 500) {
                     const errorData = await response.json();
                     throw new Error(`Cloudinary Client Error (${response.status}): ${errorData.error?.message || response.statusText}`);
                 }
-                // Erros de servidor (5xx) caem aqui para serem reentados
+                // Erros de servidor (5xx) caem aqui
                 throw new Error(`Server Error (${response.status})`);
             }
 

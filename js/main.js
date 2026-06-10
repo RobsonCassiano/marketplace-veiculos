@@ -411,6 +411,8 @@ function getMarketplacePreset() {
     const hash = location.hash || '#marketplace';
     if (hash === '#marketplace-0km') return '0km';
     if (hash === '#marketplace-seminovos') return 'seminovos';
+    if (hash === '#marketplace-usados') return 'usados';
+    if (hash === '#marketplace-colecao') return 'colecao';
     if (hash === '#marketplace-todos') return 'todos';
     return null;
 }
@@ -420,13 +422,22 @@ function matchesMarketplacePreset(vehicle, preset) {
 
     const km = numericValue(vehicle.km);
     const year = Number(vehicle.year || 0);
+    const CURRENT_YEAR = 2026;
 
     if (preset === '0km') {
         return km <= 0 || (year >= 2026 && km <= 0); // Permitir 0km com ano futuro, considerando pré-lançamentos e anúncios antecipados 
     }
 
     if (preset === 'seminovos') {
-        return km > 1000 && (km >= 50000 || year <= 2025); // Permitir seminovos com até 50.000 km ou ano até 2025, considerando veículos mais rodados ou de anos anteriores que ainda são considerados seminovos no mercado brasileiro
+        return year >= (CURRENT_YEAR - 2) && km <= 60000 && km > 0;
+    }
+
+    if (preset === 'usados') {
+        return year < (CURRENT_YEAR - 2) && year >= (CURRENT_YEAR - 20);
+    }
+
+    if (preset === 'colecao') {
+        return year < (CURRENT_YEAR - 20);
     }
 
     if (preset === 'todos') {
@@ -585,7 +596,7 @@ function formatKm(value) {
 function seedIfEmpty() {
     const v = getVehicles();
 
-    // Migração Completa: Garante que TODAS as sementes tenham o ownerEmail correto
+    // Migração: Garante que as sementes tenham o ownerEmail correto
     // Otimização: Só executa a migração se houver veículos e ainda não houver flag de migração
     if (v.length > 0 && !localStorage.getItem('buscarauto_migrated_v1')) {
     const migrationMap = {
@@ -598,7 +609,7 @@ function seedIfEmpty() {
         'seed-gol': 'contato@vianorte.com',
         'seed-onix': 'contato@autoleste.com'
     };
-    const migrated = v.map(veh => migrationMap[veh.id] ? { ...veh, ownerEmail: migrationMap[veh.id] } : veh);
+    const migrated = v.map(veh => migrationMap[veh.id] ? { ...veh, ownerEmail: migrationMap[veh.id].toLowerCase() } : veh);
     if (JSON.stringify(v) !== JSON.stringify(migrated)) saveVehicles(migrated);
     localStorage.setItem('buscarauto_migrated_v1', 'true');
 }
@@ -962,11 +973,11 @@ function renderMarketplace() {
     const subtitle = document.querySelector('.marketplace-subtitle');
     const marketplacePreset = getMarketplacePreset();
     if (subtitle) {
-        subtitle.textContent = marketplacePreset === '0km'
-            ? 'Carros 0km.'
-            : marketplacePreset === 'seminovos'
-                ? 'Seminovos.'
-                : 'Carros usados, novos e seminovos.';
+        if (marketplacePreset === '0km') subtitle.textContent = 'Carros 0km.';
+        else if (marketplacePreset === 'seminovos') subtitle.textContent = 'Carros seminovos (até 3 anos de uso e baixa km).';
+        else if (marketplacePreset === 'usados') subtitle.textContent = 'Carros usados (até 20 anos de uso).';
+        else if (marketplacePreset === 'colecao') subtitle.textContent = 'Veículos de coleção (mais de 20 anos).';
+        else subtitle.textContent = 'Carros usados, novos e seminovos.';
     }
 
     const vehicles = getFilteredVehicles();
@@ -1712,6 +1723,7 @@ function renderLojistaDashboard() {
                     <a href="#mensagens" class="text-decoration-none text-muted fw-semibold">💬 Mensagens ${unreadCount > 0 ? `<span class="badge bg-danger ms-1">${unreadCount}</span>` : `<span class="badge bg-light text-dark border ms-1">${myProposals.length}</span>`}</a>
                     <a href="#relatorios" class="text-decoration-none ${isReportsView ? 'text-dark fw-bold border-bottom border-dark border-2 pb-1' : 'text-muted fw-semibold'}">📊 Relatórios</a>
                     <a href="#perfil" class="text-decoration-none ${isSettingsView ? 'text-dark fw-bold border-bottom border-dark border-2 pb-1' : 'text-muted fw-semibold'}">⚙️ Configurações</a>
+                    <a href="#inicio" id="logoutLojistaNav" class="text-decoration-none text-danger fw-bold ms-2">↪️ Sair</a>
                 </div>
             </div>
         </nav>
@@ -1970,19 +1982,6 @@ function initForms() {
 
     const cadastroContaForm = document.getElementById('cadastroContaForm');
     if (cadastroContaForm) {
-        // Lógica de alternância de campos PF/PJ
-        cadastroContaForm.querySelectorAll('input[name="role"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const isLojista = e.target.value === 'seller';
-                document.getElementById('pf-fields').style.display = isLojista ? 'none' : 'block';
-                document.getElementById('pj-fields').style.display = isLojista ? 'block' : 'none';
-                
-                // Ajusta obrigatoriedade
-                document.querySelectorAll('#pf-fields input').forEach(i => i.required = !isLojista);
-                document.querySelectorAll('#pj-fields input').forEach(i => i.required = isLojista);
-            });
-        });
-
         cadastroContaForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const fd = new FormData(cadastroContaForm);
@@ -1990,8 +1989,8 @@ function initForms() {
             const confirmPassword = String(fd.get('confirmPassword') || '');
 
             const clients = getClients();
-            const role = String(fd.get('role') || 'seller');
-            if (role === 'client' && clients.length >= MAX_CLIENTS) {
+            const roleValue = 'client';
+            if (clients.length >= MAX_CLIENTS) {
                 alert('Limite de 5 clientes atingido para este protótipo.');
                 return;
             }
@@ -2003,28 +2002,19 @@ function initForms() {
                 return;
             }
 
-            const roleValue = role;
-            let displayName = '';
-            if (roleValue === 'seller') {
-                displayName = String(fd.get('storeName') || fd.get('responsibleName') || '').trim();
-            } else {
-                displayName = String(fd.get('name') || '').trim();
-            }
+            const displayName = String(fd.get('name') || '').trim();
             const email = String(fd.get('email') || '').trim();
 
             const newUser = {
                 role: roleValue,
-                label: roleValue === 'seller' ? 'Lojista' : 'Cliente',
+                label: 'Cliente',
                 name: displayName,
                 email,
                 image: null
             };
 
-            if (roleValue === 'client') {
-                clients.push(newUser);
-                saveClients(clients);
-            }
-
+            clients.push(newUser);
+            saveClients(clients);
             saveSession(newUser);
             syncLoginState();
 
@@ -2032,8 +2022,7 @@ function initForms() {
                 location.hash = redirectAfterLogin;
                 redirectAfterLogin = null;
             } else {
-                if (roleValue === 'seller') location.hash = '#lojista';
-                else location.hash = '#cliente';
+                location.hash = '#cadastro-veiculo';
             }
         });
     }
@@ -2932,6 +2921,7 @@ function renderClientDashboard() {
     document.getElementById('logoutDashboard')?.addEventListener('click', () => {
         clearSession();
         syncLoginState();
+        location.hash = '#inicio';
     });
 }
 
@@ -2984,10 +2974,13 @@ function updateBreadcrumbs(hash) {
         '#marketplace': 'Marketplace',
         '#marketplace-todos': 'Marketplace',
         '#marketplace-0km': 'Carros 0km',
-        '#marketplace-seminovos': 'Seminovos',
+        '#marketplace-seminovos': 'Carros Seminovos',
+        '#marketplace-usados': 'Carros Usados',
+        '#marketplace-colecao': 'De Coleção',
         '#revendas': 'Revendas Credenciadas',
         '#cadastro-veiculo': 'Anunciar Veículo',
         '#anuncie': 'Login',
+        '#login': 'Login',
         '#criar-conta': 'Cadastro',
         '#sobre': 'Sobre',
         '#termos': 'Termos de Uso',
@@ -3043,6 +3036,8 @@ function router() {
         case '#lojas-credenciadas':
         case '#marketplace-0km':
         case '#marketplace-seminovos':
+        case '#marketplace-usados':
+        case '#marketplace-colecao':
             seedIfEmpty();
             renderMarketplace();
             showLanding();
