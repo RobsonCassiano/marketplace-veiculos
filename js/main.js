@@ -1413,6 +1413,34 @@ function renderAdminDashboard() {
             </article>
         </div>
 
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <section class="panel h-100">
+                    <div class="panel-header"><h3>Distribuição de Marcas</h3></div>
+                    <div class="chart-container d-flex justify-content-center align-items-center" style="height: 300px;">
+                        <canvas id="brandDistributionChart" width="300" height="300"></canvas>
+                    </div>
+                    <div id="brandDistributionLegend" class="mt-3 small text-muted text-center"></div>
+                </section>
+            </div>
+            <div class="col-md-6">
+                <section class="panel h-100">
+                    <div class="panel-header"><h3>Visão Geral de Leads</h3></div>
+                    <div class="d-flex flex-column h-100 justify-content-around p-3">
+                        <div class="report-item">
+                            <small class="text-muted d-block">Leads de Financiamento</small>
+                            <span class="report-value">${fLeads.length}</span>
+                            <a href="#admin-leads-finance" class="small text-decoration-none">Ver detalhes</a>
+                        </div>
+                        <div class="report-item mt-3">
+                            <small class="text-muted d-block">Leads de Seguro</small>
+                            <span class="report-value">${iLeads.length}</span>
+                            <a href="#admin-leads-insurance" class="small text-decoration-none">Ver detalhes</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
         <section class="panel mb-4">
             <div class="panel-header"><h3>🚩 Moderação de Denúncias</h3></div>
             <div class="table-responsive">
@@ -1499,6 +1527,7 @@ function renderAdminDashboard() {
 
     renderAdminStores();
     renderAdminClients();
+    renderBrandDistributionChart(); // Chama a função para renderizar o gráfico
     updateAdminSidebarActive('#admin');
     container.querySelectorAll('.metric-card strong').forEach(el => animateCountUp(el));
 
@@ -1955,6 +1984,14 @@ function initForms() {
             const role = String(fd.get('role') || 'client');
             const sessionRole = role === 'seller' ? 'seller' : 'client';
             
+            // Lógica de Login para Admin
+            if (email === 'admin@buscarauto.com' && password === 'admin') {
+                saveSession({ role: 'admin', label: 'Admin', name: 'ADMIN', email: email });
+                syncLoginState();
+                location.hash = '#admin';
+                return;
+            }
+
             if (sessionRole === 'seller') {
                 const matchedStore = findStoreLogin(email);
                 if (!matchedStore) {
@@ -3209,9 +3246,25 @@ function router() {
             openInsuranceModal();
             break;
         case '#admin':
-            setSessionFromHref('#admin');
+        case '#admin-users':
+        case '#admin-stores':
+        case '#admin-settings':
+        case '#admin-leads-finance':
+        case '#admin-leads-insurance':
+        case '#admin-reports':
+            const sAdmin = getSession();
+            if (!sAdmin || sAdmin.role !== 'admin') {
+                redirectAfterLogin = hash;
+                location.hash = '#anuncie';
+                return;
+            }
             showView('admin');
-            renderAdminDashboard();
+            if (hash === '#admin') renderAdminDashboard();
+            else if (hash === '#admin-users') renderAdminClients();
+            else if (hash === '#admin-stores') { renderAdminDashboard(); renderAdminStores(); updateAdminSidebarActive(hash); }
+            else if (hash.startsWith('#admin-leads')) renderAdminLeads(hash);
+            else if (hash === '#admin-settings') renderAdminSettings();
+            else renderAdminDashboard();
             break;
         case '#mensagens':
         case '#perfil':
