@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initRouter();
     initNotificationSystem();
     initNavigationHelper();
+    initLogoutConfirmation();
     initBackToTop();
 });
 
@@ -716,24 +717,55 @@ function roleAvatar(role) {
 function syncLoginState() {
     const session = getSession();
     const entrarBtn = document.getElementById('entrarDropdown');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const loginOptions = document.querySelectorAll('.login-option');
+    const logoutOptions = document.querySelectorAll('.logout-option');
 
     if (entrarBtn) {
-        if (session && session.name) {
-            const firstName = session.name.trim().split(' ')[0];
-            entrarBtn.textContent = `Olá, ${firstName}`;
+        if (session) {
+            entrarBtn.textContent = 'Sair';
+            loginOptions.forEach(el => el.style.display = 'none');
+            logoutOptions.forEach(el => el.style.display = 'block');
         } else {
             entrarBtn.textContent = 'Entrar';
+            loginOptions.forEach(el => el.style.display = 'block');
+            logoutOptions.forEach(el => el.style.display = 'none');
         }
     }
+}
 
-    if (logoutBtn) {
-        const li = logoutBtn.closest('li');
-        const divider = li?.previousElementSibling;
-        const display = session ? 'block' : 'none';
-        if (li) li.style.display = display;
-        if (divider && divider.querySelector('.dropdown-divider')) divider.style.display = display;
-    }
+/**
+ * Inicializa o modal de confirmação de logout e centraliza a lógica de saída
+ */
+function initLogoutConfirmation() {
+    const confirmBtn = document.getElementById('confirmLogoutBtn');
+    if (!confirmBtn) return;
+
+    confirmBtn.addEventListener('click', () => {
+        clearSession();
+        syncLoginState();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('logoutConfirmModal'));
+        modal?.hide();
+        location.hash = '#inicio';
+    });
+
+    // Intercepta todos os cliques em botões de logout
+    document.body.addEventListener('click', (e) => {
+        const logoutIds = ['logoutBtn', 'logoutAdmin', 'logoutLojistaNav', 'logoutDashboard'];
+        const target = e.target.closest('a, button');
+        
+        if (target && (logoutIds.includes(target.id) || target.classList.contains('logout-trigger'))) {
+            e.preventDefault();
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('logoutConfirmModal'));
+            modal.show();
+        }
+    });
+}
+
+function triggerLogout() {
+    const modalEl = document.getElementById('logoutConfirmModal');
+    if (!modalEl) return;
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
 }
 
 function setSessionFromHref(href) {
@@ -1020,8 +1052,20 @@ function renderVehicleDetail(id) {
         return;
     }
 
-    currentDetailGallery = getVehicleGallery(v);
     const session = getSession();
+    let backHref = '#marketplace';
+    let backBtnClass = 'btn-outline-dark';
+    let backBtnText = 'Voltar para lista';
+
+    if (session) {
+        backBtnClass = 'btn-primary shadow-sm fw-bold px-3';
+        backBtnText = '⬅ Voltar ao Painel';
+        if (session.role === 'seller') backHref = '#lojista';
+        else if (session.role === 'client') backHref = '#cliente';
+    }
+
+    currentDetailGallery = getVehicleGallery(v);
+    
     const btnLabel = session ? 'Enviar mensagem' : 'Entre para contatar';
     const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.title + ' ' + (v.location || 'Brasil'))}`;
 
@@ -1036,7 +1080,7 @@ function renderVehicleDetail(id) {
                     </a>
                 </p>
             </div>
-            <a class="btn btn-outline-dark" href="#marketplace">Voltar para lista</a>
+            <a class="btn ${backBtnClass}" href="${backHref}">${backBtnText}</a>
         </div>
         <div class="vehicle-detail-page">
             <div class="vehicle-gallery">
@@ -1708,12 +1752,12 @@ function renderLojistaDashboard() {
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3 mb-4">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="#inicio">
-                    <div class="bg-light border p-2 me-2 d-flex align-items-center justify-content-center" style="width:45px;height:45px;border-radius:4px;">
-                        <span style="font-size:1.2rem;">🏢</span>
-                    </div>
-                    <div>
+                    <div class="me-3 text-end">
                         <strong class="d-block" style="line-height:1.2; font-size:1.1rem;">${session.name}</strong>
                         <small class="text-muted" style="font-size:0.75rem; font-weight:600;">Agência</small>
+                    </div>
+                    <div class="bg-light border d-flex align-items-center justify-content-center shadow-sm" style="width:48px;height:48px;border-radius:8px;overflow:hidden;">
+                        ${session.image ? `<img src="${session.image}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:1.5rem;">🏢</span>'}
                     </div>
                 </a>
                 <div class="ms-auto d-flex align-items-center gap-4">
@@ -1872,13 +1916,6 @@ function renderLojistaDashboard() {
         alert('Perfil da agência atualizado!');
         syncLoginState();
         renderLojistaDashboard();
-    });
-
-    document.getElementById('logoutLojistaNav')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearSession();
-        syncLoginState();
-        location.hash = '#inicio';
     });
 
     document.getElementById('reportPeriodSelect')?.addEventListener('change', (e) => {
@@ -2644,6 +2681,30 @@ function initVehicleLogic() {
     });
 }
 
+/**
+ * Formata uma data para exibição amigável (Hoje, Ontem, DD/MM/YYYY)
+ * @param {string} dateString - A string da data (ex: "DD/MM/YYYY, HH:MM:SS" ou "DD/MM/YYYY")
+ * @returns {string} Data formatada
+ */
+function formatChatDate(dateString) {
+    if (!dateString) return '';
+
+    const messageDate = new Date(dateString.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')); // Ajusta formato para parseamento consistente
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const isSameDay = (d1, d2) => d1.getDate() === d2.getDate() &&
+                                 d1.getMonth() === d2.getMonth() &&
+                                 d1.getFullYear() === d2.getFullYear();
+
+    const time = messageDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    if (isSameDay(messageDate, today)) return `Hoje às ${time}`;
+    if (isSameDay(messageDate, yesterday)) return `Ontem às ${time}`;
+    return `${messageDate.toLocaleDateString('pt-BR')} às ${time}`;
+}
+
 function renderClientDashboard() {
     const session = getSession();
     const container = document.getElementById('cliente'); 
@@ -2786,12 +2847,12 @@ function renderClientDashboard() {
                 <div class="chat-list">
                     ${myProposals.length ? myProposals.map((p, idx) => `
                         <div class="chat-list-item ${String(p.id) === String(activeChatId) ? 'active' : ''}" data-id="${p.id}">
-                            <div class="d-flex justify-content-between mb-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
                                 <strong class="d-flex align-items-center">
                                     ${p.agency}
                                     ${p.unread ? '<span class="unread-dot" title="Mensagem não lida"></span>' : ''}
                                 </strong>
-                                <small class="text-muted">${p.date}</small>
+                                <small class="text-muted">${formatChatDate(p.date)}</small>
                             </div>
                             <p class="mb-0 text-muted small text-truncate">${p.message}</p>
                         </div>
@@ -2804,16 +2865,19 @@ function renderClientDashboard() {
                         <strong>${activeProposal.agency}</strong>
                         <button class="btn btn-sm btn-outline-dark">Ver anúncio</button>
                     </div>
-                    <div class="chat-history">
+                    <div class="chat-history" id="chat-history">
                         <div class="chat-bubble received">Olá, ${displayName.split(' ')[0]}! Recebemos seu interesse. O carro ainda está disponível em nossa loja em São Paulo. Gostaria de agendar uma visita?</div>
                         <div class="chat-bubble sent">${activeProposal.message}</div>
                         <div class="chat-bubble received">Perfeito. Estamos abertos até as 18h. Precisa de uma simulação de financiamento?</div>
+                        ${(activeProposal.replies || []).map(r => `
+                            <div class="chat-bubble ${r.sender === 'client' ? 'sent' : 'received'}">${r.text}<br><small class="text-muted" style="font-size:0.75rem;">${formatChatDate(r.date)}</small></div>
+                        `).join('')}
                     </div>
                     <div class="p-3 border-top bg-white">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Digite sua mensagem...">
-                            <button class="btn btn-primary">Enviar</button>
-                        </div>
+                        <form id="chatForm" class="input-group">
+                            <input type="text" id="chatInput" class="form-control" placeholder="Digite sua mensagem..." required>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </form>
                     </div>
                 ` : `
                     <div class="h-100 d-flex align-items-center justify-content-center text-muted">
@@ -2901,6 +2965,32 @@ function renderClientDashboard() {
         renderClientDashboard();
     });
 
+    // Lógica para responder no Chat
+    document.getElementById('chatForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const allProposals = getProposals();
+        const updated = allProposals.map(p => {
+            if (String(p.id) === String(activeChatId)) {
+                const replies = p.replies || [];
+                replies.push({ sender: 'client', text, date: new Date().toLocaleString() });
+                return { ...p, replies };
+            }
+            return p;
+        });
+        saveProposals(updated);
+        renderClientDashboard();
+    });
+
+    // Auto-scroll para a última mensagem
+    const chatHistory = document.getElementById('chat-history');
+    if (chatHistory) {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
     document.getElementById('proposalForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const fd = new FormData(e.target);
@@ -2918,11 +3008,6 @@ function renderClientDashboard() {
         renderClientDashboard();
     });
 
-    document.getElementById('logoutDashboard')?.addEventListener('click', () => {
-        clearSession();
-        syncLoginState();
-        location.hash = '#inicio';
-    });
 }
 
 function setLandingVisible(isVisible, showHero = true) {
@@ -3091,18 +3176,11 @@ function router() {
             break;
         case '#login':
         case '#anuncie':
-            const sAnuncie = getSession();
-            if (sAnuncie) {
-                // Se já estiver logado, leva para o painel correspondente
-                if (sAnuncie.role === 'seller') location.hash = '#lojista';
-                else location.hash = '#cliente';
-            } else {
-                showView('anuncie');
-                // Exibe o aviso se o usuário foi redirecionado ao tentar realizar uma ação restrita
-                const loginAlert = document.getElementById('login-alert');
-                if (loginAlert) {
-                    loginAlert.classList.toggle('d-none', !redirectAfterLogin);
-                }
+            showView('anuncie');
+            // Exibe o aviso se o usuário foi redirecionado ao tentar realizar uma ação restrita
+            const loginAlert = document.getElementById('login-alert');
+            if (loginAlert) {
+                loginAlert.classList.toggle('d-none', !redirectAfterLogin);
             }
             break;
         case '#revendas':

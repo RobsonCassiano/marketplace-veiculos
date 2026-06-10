@@ -93,12 +93,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                             id="entrarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             Entrar
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="entrarDropdown">
-                            <li><a class="dropdown-item" href="#login">Login</a></li>
-                            <li><a class="dropdown-item" href="#login">Sou Lojista</a></li>
-                            <li><hr class="dropdown-divider" style="display: none;"></li>
-                            <li style="display: none;"><a class="dropdown-item text-danger fw-bold" href="#inicio" id="logoutBtn">Sair</a></li>
-                           
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="entrarDropdown" id="entrarMenu">
+                            <li class="login-option"><a class="dropdown-item" href="#login">Login</a></li>
+                            <li class="login-option"><a class="dropdown-item" href="#login">Sou Lojista</a></li>
+                            <li class="logout-option" style="display: none;"><hr class="dropdown-divider"></li>
+                            <li class="logout-option" style="display: none;"><a class="dropdown-item text-danger fw-bold" href="#inicio" id="logoutBtn">Sair</a></li>
                         </ul>
                         </div>
                     </div>
@@ -887,6 +886,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" id="confirmBanBtn" class="btn btn-danger px-4">Confirmar Banimento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Logout -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="logoutConfirmModalLabel">Confirmar Saída</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-0">Tem certeza que deseja sair da sua conta? Você precisará entrar novamente para gerenciar seus anúncios e mensagens.</p>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirmLogoutBtn" class="btn btn-danger px-4">Sair da Conta</button>
                 </div>
             </div>
         </div>

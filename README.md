@@ -24,7 +24,6 @@ Nome sugerido--
 ### 3. **Menu Dropdown de Login**
 - Menu dropdown que aparece ao clicar em "Entrar"
 - Opções: **Login** (cliente) e **Sou Lojista**
-- Cada opção com ícone identificador
 - Animação suave (fade + slide)
 - Lógica de fechamento automático ao clicar fora ou ao abrir outro menu simultaneamente
 
